@@ -1,3 +1,5 @@
+import type { FieldLogic } from "@/framework/reactive/types";
+
 export type FieldType = 
   | "text"
   | "email"
@@ -23,6 +25,9 @@ export interface FormFieldConfig {
   // Specific to select/radio
   options?: { label: string; value: string; description?: string }[];
   multiSelect?: boolean; // Only for select
+
+  // Server-driven reactive logic
+  logics?: FieldLogic[];
 }
 
 export interface FormSectionConfig {

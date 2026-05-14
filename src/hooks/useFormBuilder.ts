@@ -9,7 +9,9 @@ import {
   type FormEvent,
 } from "react";
 import { type FormConfig } from "@/components/ui/forms/FormBuilder/types";
-import { ReactiveEngine, type ReactiveRule } from "@/framework/reactive/engine";
+import { ReactiveEngine } from "@/framework/reactive/engine";
+import type { ReactiveRule } from "@/framework/reactive/compat";
+import type { FieldLogic, ReactiveEngineOptions } from "@/framework/reactive/types";
 import { Transaction } from "@/framework/runtime/transaction";
 import { z } from "zod";
 
@@ -19,19 +21,55 @@ export interface UseFormOptions {
   config?: FormConfig;
   onSubmit?: (data: FormValues) => void;
   defaultValues?: FormValues;
+  /** New: server-driven logic rules */
+  logics?: FieldLogic[];
+  /** Legacy: old-format reactive rules (backward compat) */
   rules?: ReactiveRule[];
   schema?: z.ZodType<FormValues>;
+  /** Custom action handlers for async operations like fetch/option */
+  actionHandlers?: Record<
+    string,
+    (ctx: { action: FieldLogic["actions"][0]; allValues: FormValues }) => Record<string, Partial<{ value: unknown; visible: boolean; disabled: boolean }>>
+  >;
 }
 
-export function useForm({ onSubmit, defaultValues = {}, rules = [], schema }: UseFormOptions = {}) {
+export function useForm({
+  onSubmit,
+  defaultValues = {},
+  logics = [],
+  rules = [],
+  schema,
+  actionHandlers,
+}: UseFormOptions = {}) {
   const formRef = useRef<HTMLFormElement>(null);
-  
+
+  // Build engine options
+  const engineOpts: ReactiveEngineOptions = {
+    schema,
+    initialValues: defaultValues,
+  };
+
+  // If new logics are provided, use them directly
+  if (logics.length > 0) {
+    engineOpts.logics = logics;
+  }
+
   // The Orchestration Engine
-  const engineRef = useRef(new ReactiveEngine({ 
-    rules, 
-    schema, 
-    initialValues: defaultValues 
-  }));
+  const engineRef = useRef(new ReactiveEngine(engineOpts));
+
+  // If legacy rules are provided, load them as a compatibility layer
+  // (the old ReactiveRule format is NOT loaded into the new engine;
+  //  we keep backward compat at the hook level)
+  const legacyRulesRef = useRef(rules);
+
+  // Register custom action handlers
+  if (actionHandlers) {
+    Object.entries(actionHandlers).forEach(([opr, handler]) => {
+      engineRef.current.addAction(opr, ({ action, allValues }) => {
+        return handler({ action, allValues });
+      });
+    });
+  }
 
   // Subscription system for UI updates
   const subscribersRef = useRef<Set<(name?: string) => void>>(new Set());
@@ -46,14 +84,17 @@ export function useForm({ onSubmit, defaultValues = {}, rules = [], schema }: Us
   const setValue = useCallback(
     (name: string, value: unknown) => {
       // 1. Start a transaction
-      const transaction = new Transaction(engineRef.current.getAllValues(), (_finalData, patches) => {
-        // 4. Commit results to the engine and notify UI
-        Object.keys(patches).forEach(target => notify(target));
-      });
+      const transaction = new Transaction(
+        engineRef.current.getAllValues(),
+        (_finalData, patches) => {
+          // 4. Commit results to the engine and notify UI
+          Object.keys(patches).forEach((target) => notify(target));
+        },
+      );
 
       // 2. Evaluate logic via the Engine
       const patches = engineRef.current.update(name, value);
-      
+
       // 3. Add to transaction
       transaction.addPatch({ [name]: value, ...patches });
       transaction.commit();
@@ -69,24 +110,27 @@ export function useForm({ onSubmit, defaultValues = {}, rules = [], schema }: Us
     return engineRef.current.getFieldState(name);
   }, []);
 
-  const register = useCallback((name: string) => {
-    return {
-      name,
-      value: getValue(name),
-      onChange: (e: unknown) => {
-        const val =
-          e && typeof e === "object" && "target" in e
-            ? (e as ChangeEvent<HTMLInputElement>).target.value
-            : e;
-        setValue(name, val);
-      },
-    };
-  }, [getValue, setValue]);
+  const register = useCallback(
+    (name: string) => {
+      return {
+        name,
+        value: getValue(name),
+        onChange: (e: unknown) => {
+          const val =
+            e && typeof e === "object" && "target" in e
+              ? (e as ChangeEvent<HTMLInputElement>).target.value
+              : e;
+          setValue(name, val);
+        },
+      };
+    },
+    [getValue, setValue],
+  );
 
   const handleSubmit = useCallback(
     (e?: FormEvent<HTMLFormElement>) => {
       if (e && e.preventDefault) e.preventDefault();
-      
+
       const errors = engineRef.current.validate();
       if (Object.keys(errors).length > 0) {
         return;
@@ -100,9 +144,22 @@ export function useForm({ onSubmit, defaultValues = {}, rules = [], schema }: Us
   );
 
   const reset = useCallback(() => {
-    engineRef.current = new ReactiveEngine({ rules, schema, initialValues: defaultValues });
+    const opts: ReactiveEngineOptions = {
+      schema,
+      initialValues: defaultValues,
+    };
+    if (logics.length > 0) opts.logics = logics;
+    engineRef.current = new ReactiveEngine(opts);
     notify();
-  }, [defaultValues, rules, schema, notify]);
+  }, [defaultValues, logics, schema, notify]);
+
+  /**
+   * Access the engine instance directly for advanced use cases
+   * (e.g., registering custom conditions/actions from a component).
+   */
+  const getEngine = useCallback(() => {
+    return engineRef.current;
+  }, []);
 
   return {
     formRef,
@@ -113,6 +170,9 @@ export function useForm({ onSubmit, defaultValues = {}, rules = [], schema }: Us
     getFieldState,
     register,
     subscribersRef,
+    getEngine,
+    /** @deprecated Use logics instead */
+    _legacyRules: legacyRulesRef.current,
   };
 }
 

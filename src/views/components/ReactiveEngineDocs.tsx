@@ -1,6 +1,11 @@
-import { Cpu, Zap, Eye, Lock } from "lucide-react";
-import { type ReactiveRule } from "@/framework/reactive/engine";
-import { useForm, FormContext, useFieldState, useWatch } from "@/hooks/useFormBuilder";
+import { Cpu, Zap, Eye, Lock, Plus } from "lucide-react";
+import type { FieldLogic } from "@/framework/reactive/types";
+import {
+  useForm,
+  FormContext,
+  useFieldState,
+  useWatch,
+} from "@/hooks/useFormBuilder";
 import Label from "@components/ui/typography/Label/Label";
 import Box from "@components/ui/containers/Box/Box";
 import Card from "@components/ui/containers/Card/Card";
@@ -10,45 +15,134 @@ import type { FormConfig } from "@components/ui/forms/FormBuilder/types";
 import Button from "@components/ui/inputs/Button/Button";
 
 /**
- * Reactive rules for the shipping form demo.
- * These declaratively define computed fields and conditional UI behavior.
+ * Server-driven logic rules — matches the backend JSON structure exactly.
+ * No JS functions needed. The engine resolves operators from its registry.
  */
-const shippingRules: ReactiveRule[] = [
-  {
-    id: "total_weight",
-    dependencies: ["item_weight", "quantity"],
-    compute: (data) => {
-      const w = Number(data.item_weight) || 0;
-      const q = Number(data.quantity) || 1;
-      return (w * q).toFixed(2);
-    },
-  },
-  {
-    id: "shipping_cost",
-    dependencies: ["total_weight", "shipping_type"],
-    compute: (data) => {
-      const weight = Number(data.total_weight) || 0;
-      const type = data.shipping_type as string;
-      const rate = type === "International" ? 12.5 : 5.0;
-      return `₹${(weight * rate).toFixed(2)}`;
-    },
-  },
+const shippingLogics: FieldLogic[] = [
+  // RULE 1: When shipping_type updates and equals "International" → show customs_declaration
   {
     id: "show_customs",
-    dependencies: ["shipping_type"],
-    when: (data) => data.shipping_type === "International",
-    then: [{ action: "show", target: "customs_declaration" }],
+    active: true,
+    conditions: [
+      {
+        id: "c1",
+        field: "shipping_type",
+        opr: "eq",
+        values: "International",
+        pos: 1,
+      },
+    ],
+    actions: [
+      {
+        id: "a1",
+        resourceType: "field",
+        opr: "show",
+        fields: ["customs_declaration"],
+      },
+    ],
   },
+  // RULE 2: When shipping_type is NOT "International" → hide customs_declaration
+  {
+    id: "hide_customs",
+    active: true,
+    conditions: [
+      {
+        id: "c2",
+        field: "shipping_type",
+        opr: "neq",
+        values: "International",
+        pos: 1,
+      },
+    ],
+    actions: [
+      {
+        id: "a2",
+        resourceType: "field",
+        opr: "hide",
+        fields: ["customs_declaration"],
+      },
+    ],
+  },
+  // RULE 3: When total_weight > 50 → disable express_notes
   {
     id: "disable_express",
-    dependencies: ["total_weight"],
-    when: (data) => Number(data.total_weight) > 50,
-    then: [{ action: "disable", target: "express_notes" }],
+    active: true,
+    conditions: [
+      {
+        id: "c3",
+        field: "total_weight",
+        opr: "gt",
+        values: 50,
+        pos: 1,
+      },
+    ],
+    actions: [
+      {
+        id: "a3",
+        resourceType: "field",
+        opr: "disable",
+        fields: ["express_notes"],
+      },
+    ],
+  },
+  // RULE 4: When total_weight <= 50 → enable express_notes
+  {
+    id: "enable_express",
+    active: true,
+    conditions: [
+      {
+        id: "c4",
+        field: "total_weight",
+        opr: "lte",
+        values: 50,
+        pos: 1,
+      },
+    ],
+    actions: [
+      {
+        id: "a4",
+        resourceType: "field",
+        opr: "enable",
+        fields: ["express_notes"],
+      },
+    ],
+  },
+  // RULE 5: When item_weight OR quantity updates → compute total_weight
+  {
+    id: "compute_weight",
+    active: true,
+    conditions: [
+      {
+        id: "c5a",
+        field: "item_weight",
+        opr: "update",
+        values: "",
+        pos: 1,
+      },
+      {
+        id: "c5b",
+        field: "quantity",
+        opr: "update",
+        values: "",
+        connector: "or",
+        pos: 2,
+      },
+    ],
+    actions: [
+      {
+        id: "a5",
+        resourceType: "field",
+        opr: "set",
+        valueType: "fx",
+        value: "{{id_item_weight}} * {{id_quantity}}",
+        fields: ["total_weight"],
+      },
+    ],
   },
 ];
 
 /**
- * FormConfig: Declarative form layout using our FormBuilder.
+ * FormConfig — declarative form layout.
  */
 const shippingFormConfig: FormConfig = {
   id: "reactive-engine-demo",
@@ -66,7 +160,12 @@ const shippingFormConfig: FormConfig = {
           type: "number",
           required: true,
         },
-        { name: "quantity", label: "Quantity", type: "number", required: true },
+        {
+          name: "quantity",
+          label: "Quantity",
+          type: "number",
+          required: true,
+        },
       ],
     },
     {
@@ -113,36 +212,43 @@ const defaultValues = {
   shipping_type: "Domestic",
   customs_declaration: "",
   express_notes: "",
+  total_weight: 10,
 };
 
 /**
- * A child component that uses useWatch and useFieldState
- * to reactively render computed outputs.
+ * Computed outputs — uses useWatch inside FormContext.
  */
 const ComputedOutputs = () => {
   const totalWeight = useWatch("total_weight");
-  const shippingCost = useWatch("shipping_cost");
   const expressState = useFieldState("express_notes");
 
   return (
     <Box display="grid" gap="md" className="grid-cols-1 md:grid-cols-3">
       <OutputCard label="Total Weight" value={`${totalWeight ?? "0"} kg`} />
       <OutputCard
-        label="Shipping Cost"
-        value={String(shippingCost ?? "₹0.00")}
-      />
-      <OutputCard
         label="Express Available"
         value={expressState.disabled ? "No (>50kg)" : "Yes"}
         variant={expressState.disabled ? "destructive" : "success"}
+      />
+      <OutputCard
+        label="Customs Required"
+        value={
+          useFieldState("customs_declaration").visible
+            ? "Yes (International)"
+            : "No"
+        }
+        variant={
+          useFieldState("customs_declaration").visible
+            ? "warning"
+            : "default"
+        }
       />
     </Box>
   );
 };
 
 /**
- * A child component that uses useFieldState to inspect
- * every field's reactive state for debugging.
+ * Field state inspector — uses useFieldState for each field.
  */
 const FieldStateInspector = () => {
   const fields = [
@@ -150,7 +256,6 @@ const FieldStateInspector = () => {
     "quantity",
     "shipping_type",
     "total_weight",
-    "shipping_cost",
     "customs_declaration",
     "express_notes",
   ];
@@ -209,10 +314,16 @@ const FieldStateCard = ({ name }: { name: string }) => {
 const ReactiveEngineDocs = () => {
   const form = useForm({
     defaultValues,
-    rules: shippingRules,
+    logics: shippingLogics,
     onSubmit: (data) => {
       console.log("[ReactiveEngine Demo] Submitted:", data);
     },
+  });
+
+  // Register a custom condition via the SDK API
+  const engine = form.getEngine();
+  engine.addCondition("contains", ({ fieldValue, conditionValues }) => {
+    return String(fieldValue).includes(String(conditionValues));
   });
 
   return (
@@ -236,9 +347,16 @@ const ReactiveEngineDocs = () => {
           <Box display="flex" direction="column" gap="xs">
             <Label variant="heading">Reactive Engine</Label>
             <Label variant="subheading" className="max-w-2xl">
-              A dependency-graph-based runtime that powers dynamic forms. Fields
-              react to each other's values — computing, showing/hiding, and
-              enabling/disabling automatically.
+              A plugin-based reactive runtime for server-driven forms. Register
+              conditions and actions via{" "}
+              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-primary">
+                engine.addCondition()
+              </code>{" "}
+              /{" "}
+              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-primary">
+                engine.addAction()
+              </code>
+              .
             </Label>
           </Box>
         </Box>
@@ -248,22 +366,55 @@ const ReactiveEngineDocs = () => {
       <Box display="grid" gap="md" className="grid-cols-1 md:grid-cols-3">
         <ConceptCard
           icon={<Zap size={20} className="text-primary" />}
-          title="Computed Fields"
-          desc="Define formulas that auto-calculate when dependencies change. e.g. total_weight = item_weight × quantity."
+          title="Registry Pattern"
+          desc="Conditions and actions are resolved from a Map at runtime. No hardcoded switch/if-else. Built-ins use the same API as custom operators."
+        />
+        <ConceptCard
+          icon={<Plus size={20} className="text-primary" />}
+          title="Extensible SDK"
+          desc='engine.addCondition("contains", fn) — register custom operators with a single call. The engine is open for extension, closed for modification.'
         />
         <ConceptCard
           icon={<Eye size={20} className="text-primary" />}
-          title="Conditional Visibility"
-          desc="Show or hide fields based on runtime conditions. e.g. Show customs declaration only for international shipping."
-        />
-        <ConceptCard
-          icon={<Lock size={20} className="text-primary" />}
-          title="Enable / Disable"
-          desc="Disable fields when conditions are met. e.g. Disable express shipping when package exceeds 50kg."
+          title="Server-Driven"
+          desc="Logic rules come as raw JSON from the backend. The engine consumes them verbatim — no transformation step needed."
         />
       </Box>
 
-      {/* Live Demo using FormBuilder + useForm */}
+      {/* SDK API Example */}
+      <Card
+        variant="default"
+        padding="lg"
+        radius="xl"
+        className="border-border/50 bg-card/50"
+      >
+        <Box display="flex" direction="column" gap="sm">
+          <Label variant="title" className="flex items-center gap-2">
+            <Lock size={16} className="text-primary" />
+            SDK API
+          </Label>
+          <pre className="overflow-x-auto rounded-lg bg-muted/50 p-4 text-xs font-mono text-foreground">
+            {`// Register a custom condition
+engine.addCondition("contains", ({ fieldValue, conditionValues }) => {
+  return String(fieldValue).includes(String(conditionValues));
+});
+
+// Register a custom action
+engine.addAction("sendNotification", ({ action }) => {
+  notify(action.value);
+  return {}; // return patches to field states
+});
+
+// Override the built-in "fetch" with your own API logic
+engine.addAction("fetch", async ({ action, allValues }) => {
+  const data = await api.get(\`/records/\${allValues.contactId}\`);
+  return { gst_number: { value: data.gst } };
+});`}
+          </pre>
+        </Box>
+      </Card>
+
+      {/* Live Demo */}
       <Card
         variant="default"
         padding="lg"
@@ -284,30 +435,25 @@ const ReactiveEngineDocs = () => {
               Live Playground
             </Label>
             <Label variant="subtitle">
-              This form is rendered by{" "}
+              This form is powered by{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-primary">
-                FormBuilder
+                FieldLogic[]
               </code>{" "}
-              and powered by{" "}
+              — pure JSON rules, no JS functions. The engine resolves every{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-primary">
-                useForm
+                opr
               </code>{" "}
-              +{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-primary">
-                ReactiveEngine
-              </code>
-              .
+              from its registry.
             </Label>
           </Box>
 
           <div className="h-px w-full bg-border" />
 
           <FormContext.Provider value={form}>
-            {/* The actual FormBuilder-driven form */}
+            {/* The FormBuilder-driven form */}
             <FormBuilder
               config={shippingFormConfig}
               form={form}
-              rules={shippingRules}
               defaultValues={defaultValues}
             >
               <Button type="submit" variant="default">
@@ -317,7 +463,7 @@ const ReactiveEngineDocs = () => {
 
             <div className="h-px w-full bg-border" />
 
-            {/* Computed Outputs — uses useWatch inside FormContext */}
+            {/* Computed Outputs */}
             <Label
               variant="subtitle"
               className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
@@ -326,7 +472,7 @@ const ReactiveEngineDocs = () => {
             </Label>
             <ComputedOutputs />
 
-            {/* Field State Inspector — uses useFieldState inside FormContext */}
+            {/* Field State Inspector */}
             <Label
               variant="subtitle"
               className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
@@ -379,7 +525,7 @@ const OutputCard = ({
 }: {
   label: string;
   value: string;
-  variant?: "default" | "success" | "destructive";
+  variant?: "default" | "success" | "destructive" | "warning";
 }) => (
   <Card
     variant="default"
@@ -397,7 +543,9 @@ const OutputCard = ({
             ? "text-green-500"
             : variant === "destructive"
               ? "text-destructive"
-              : "text-foreground"
+              : variant === "warning"
+                ? "text-yellow-500"
+                : "text-foreground"
         }`}
       >
         {value}

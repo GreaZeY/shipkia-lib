@@ -6,7 +6,7 @@ import { useFormContext, useFieldState } from "@/hooks/useFormBuilder";
 
 export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
   const { register } = useFormContext();
-  const { value, visible, disabled } = useFieldState(field.name);
+  const { value, visible, disabled, options: dynamicOptions } = useFieldState(field.name);
   
   // Section 24: Dynamic Visibility
   if (!visible) return null;
@@ -30,7 +30,9 @@ export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
   } else if (field.type === "select") {
     componentProps.value = value;
     componentProps.onChange = onChange;
-    componentProps.options = field.options?.map((o) => ({
+    // Prefer dynamic options from engine (e.g., via "option" action) over static config
+    const sourceOptions = (dynamicOptions as typeof field.options) ?? field.options;
+    componentProps.options = sourceOptions?.map((o) => ({
       id: o.value,
       label: o.label,
       description: o.description,

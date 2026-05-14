@@ -210,7 +210,7 @@ const Input = ({
           <fieldset
             aria-hidden="true"
             className={cn(
-              "pointer-events-none absolute inset-0 m-0 rounded-full border-2 transition-all duration-200",
+              "pointer-events-none absolute inset-0 m-0 rounded-full border transition-all duration-200",
               displayError
                 ? "border-destructive group-focus-within:border-destructive group-focus-within:ring-2 group-focus-within:ring-destructive/10"
                 : "border-input group-focus-within:border-primary/50 group-focus-within:ring-2 group-focus-within:ring-primary/10",
