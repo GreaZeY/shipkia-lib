@@ -24,7 +24,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@framework/*": ["./src/framework/*"]
+      "@framework/*": ["./src/framework/*"],
+      "@components/*": ["./src/components/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@views/*": ["./src/views/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"],
     }
   },
   "include": ["src"]

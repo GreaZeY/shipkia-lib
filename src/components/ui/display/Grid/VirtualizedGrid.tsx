@@ -13,9 +13,9 @@ import type {
   GridColumn,
   GridProps,
   GridRowData,
-} from "./types";
+} from "@components/ui/display/Grid/types";
 import { resolve } from "@/framework/registry";
-import DefaultCellRenderer from "./DefaultCellRenderer";
+import DefaultCellRenderer from "@components/ui/display/Grid/DefaultCellRenderer";
 import Checkbox from "@/components/ui/inputs/Checkbox/Checkbox";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useGridNavigation } from "@/hooks/useGridNavigation";

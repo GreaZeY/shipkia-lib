@@ -24,6 +24,10 @@ export default defineConfig({
       "@lib": path.resolve(__dirname, "./src/lib"),
       "@components": path.resolve(__dirname, "./src/components"),
       "@framework": path.resolve(__dirname, "./src/framework"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@views": path.resolve(__dirname, "./src/views"),
+      "@constants": path.resolve(__dirname, "./src/constants"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
     },
   },
 });

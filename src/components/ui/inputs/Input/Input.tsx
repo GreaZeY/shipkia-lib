@@ -8,7 +8,7 @@ import {
   type InputChangeData,
 } from "@/hooks/useInput";
 import { cn } from "@/lib/utils";
-import { inputVariants } from "./Input.styles";
+import { inputVariants } from "@components/ui/inputs/Input/Input.styles";
 import { useFloatingLabel } from "@/hooks/useFloatingLabel";
 
 export { type InputType, type ValidationTrigger, type InputChangeData };

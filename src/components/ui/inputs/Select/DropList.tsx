@@ -1,5 +1,5 @@
 import * as React from "react";
-import SelectItem from "./SelectItem";
+import SelectItem from "@components/ui/inputs/Select/SelectItem";
 import { type SelectOption } from "@/hooks/useSelect";
 
 export interface DropListProps {

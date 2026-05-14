@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Box from "../../containers/Box/Box";
+import Box from "@components/ui/containers/Box/Box";
 import { type SelectOption } from "@/hooks/useSelect";
-import Truncate from "../../display/Truncate/Truncate";
+import Truncate from "@components/ui/display/Truncate/Truncate";
 
 export interface SelectItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   option: SelectOption;

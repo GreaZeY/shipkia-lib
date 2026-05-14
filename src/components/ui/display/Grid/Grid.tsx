@@ -11,12 +11,12 @@ import type {
   GridColumn,
   GridProps,
   GridRowData,
-} from "./types";
+} from "@components/ui/display/Grid/types";
 import { resolve } from "@/framework/registry";
-import DefaultCellRenderer from "./DefaultCellRenderer";
-import Checkbox from "../../inputs/Checkbox/Checkbox";
+import DefaultCellRenderer from "@components/ui/display/Grid/DefaultCellRenderer";
+import Checkbox from "@components/ui/inputs/Checkbox/Checkbox";
 import { useGridNavigation } from "@/hooks/useGridNavigation";
-import Truncate from "../Truncate/Truncate";
+import Truncate from "@components/ui/display/Truncate/Truncate";
 
 // --- Memoized Row Component (P1 Issue #6) ---
 const GridRow = React.memo(

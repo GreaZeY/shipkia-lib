@@ -1,6 +1,6 @@
 import * as React from "react";
-import { type FormFieldConfig } from "./types";
-import { FieldRegistry } from "./fieldRegistry";
+import { type FormFieldConfig } from "@components/ui/forms/FormBuilder/types";
+import { FieldRegistry } from "@components/ui/forms/FormBuilder/fieldRegistry";
 import Box from "@/components/ui/containers/Box/Box";
 import { useFormContext, useFieldState } from "@/hooks/useFormBuilder";
 

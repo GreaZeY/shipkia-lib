@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import { resolve } from "../framework/registry";
+import { resolve } from "@framework/registry";
 
 const DefaultListView = lazy(() => import("./list/BaseListView"));
 const DefaultFormView = lazy(() => import("./form/BaseFormView"));

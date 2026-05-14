@@ -5,19 +5,19 @@ export {
   resolveAll,
   hasOverride,
   getRegisteredKeys,
-} from "./registry";
+} from "@framework/registry";
 export {
   bootFramework,
   getAppSidebarItems,
   getAppRoutes,
   getThemeOverrides,
-} from "./boot";
-// export { installedApps } from "./app-manifest";
-export { useShell } from "./runtime/shell";
+} from "@framework/boot";
+// export { installedApps } from "@framework/app-manifest";
+export { useShell } from "@framework/runtime/shell";
 export type {
   AppConfig,
   SidebarItem,
   RouteConfig,
   ThemeOverrides,
   AppManifestEntry,
-} from "./types";
+} from "@framework/types";

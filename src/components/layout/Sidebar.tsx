@@ -1,8 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppState } from "@/hooks/useAppState";
 import { getAppSidebarItems } from "@/framework/boot";
-import {
-  Accordion,
+import Accordion, {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,

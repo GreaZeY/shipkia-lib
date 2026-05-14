@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import type { SelectOption, UseSelectProps } from "./useSelect";
+import type { SelectOption, UseSelectProps } from "@/hooks/useSelect";
 
 export interface UseAutocompleteProps extends UseSelectProps {
   allowCustom?: boolean;

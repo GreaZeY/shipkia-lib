@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Button, { type ButtonProps } from "../Button/Button";
+import Button, { type ButtonProps } from "@components/ui/inputs/Button/Button";
 
 export interface SelectTriggerProps extends Omit<ButtonProps, "variant"> {
   isOpen?: boolean;

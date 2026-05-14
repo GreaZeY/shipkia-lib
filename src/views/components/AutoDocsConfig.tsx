@@ -1,15 +1,15 @@
-import Button from "../../components/ui/inputs/Button/Button";
+import Button from "@components/ui/inputs/Button/Button";
 import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../components/ui/containers/Accordion/Accordion";
-import { PopoverContent } from "../../components/ui/containers/Popover/Popover";
+} from "@components/ui/containers/Accordion/Accordion";
+import { PopoverContent } from "@components/ui/containers/Popover/Popover";
 import {
   TooltipContent,
   TooltipTrigger,
-} from "../../components/ui/display/Tooltip/Tooltip";
-import VirtualizedGrid from "../../components/ui/display/Grid/VirtualizedGrid";
+} from "@components/ui/display/Tooltip/Tooltip";
+import VirtualizedGrid from "@components/ui/display/Grid/VirtualizedGrid";
 export interface PreviewConfig {
   defaultProps?: Record<string, unknown>;
   renderAll?: string[];

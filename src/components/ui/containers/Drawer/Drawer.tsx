@@ -3,7 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Button from "../../inputs/Button/Button";
+import Button from "@components/ui/inputs/Button/Button";
 
 const drawerVariants = cva(
   "z-50 flex flex-col gap-4 p-6 transition-all duration-300 ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out",

@@ -1,5 +1,5 @@
 import { lazy, type ComponentType } from "react";
-import { type FieldType } from "./types";
+import { type FieldType } from "@components/ui/forms/FormBuilder/types";
 
 const Input = lazy(() => import("@/components/ui/inputs/Input/Input"));
 const Select = lazy(() => import("@/components/ui/inputs/Select/Select"));

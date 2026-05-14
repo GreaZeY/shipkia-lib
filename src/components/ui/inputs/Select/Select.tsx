@@ -5,13 +5,13 @@ import { useSelect, type SelectOption } from "@/hooks/useSelect";
 import Popover, {
   PopoverContent,
   PopoverTrigger,
-} from "../../containers/Popover/Popover";
-import Box from "../../containers/Box/Box";
-import Chip from "../../display/Chip/Chip";
-import Input from "../Input/Input";
-import SelectTrigger from "./SelectTrigger";
+} from "@components/ui/containers/Popover/Popover";
+import Box from "@components/ui/containers/Box/Box";
+import Chip from "@components/ui/display/Chip/Chip";
+import Input from "@components/ui/inputs/Input/Input";
+import SelectTrigger from "@components/ui/inputs/Select/SelectTrigger";
 import { useListNavigation } from "@/hooks/useListNavigation";
-import Skeleton from "../../display/Skeleton/Skeleton";
+import Skeleton from "@components/ui/display/Skeleton/Skeleton";
 
 // Lazy load the virtualized list to keep the initial bundle small
 const VirtualizedList = React.lazy(() => import("./VirtualizedList"));

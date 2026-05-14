@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { LoaderCircle } from "lucide-react";
 import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./Button.styles";
+import { buttonVariants } from "@components/ui/inputs/Button/Button.styles";
 
 export interface ButtonProps
   extends

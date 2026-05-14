@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { FolderKanban, Settings, Share2, Plus } from "lucide-react";
-import Box from "../../components/ui/containers/Box/Box";
-import Button from "../../components/ui/inputs/Button/Button";
-import { register } from "../../framework/registry";
+import Box from "@components/ui/containers/Box/Box";
+import Button from "@components/ui/inputs/Button/Button";
+import { register } from "@framework/registry";
 
 /**
  * CustomProjectHeader - An override for the 'Project' doctype header.

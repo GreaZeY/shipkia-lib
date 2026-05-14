@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "../../../../lib/utils";
-import { containerVariants } from "./Container.styles";
+import { cn } from "@lib/utils";
+import { containerVariants } from "@components/ui/containers/Container/Container.styles";
 
 export interface ContainerProps
   extends

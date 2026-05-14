@@ -1,7 +1,7 @@
 import { Sparkles, Package, Zap, ShieldCheck } from "lucide-react";
-import Label from "../../components/ui/typography/Label/Label";
-import Box from "../../components/ui/containers/Box/Box";
-import Card from "../../components/ui/containers/Card/Card";
+import Label from "@components/ui/typography/Label/Label";
+import Box from "@components/ui/containers/Box/Box";
+import Card from "@components/ui/containers/Card/Card";
 
 const IntroDocs = () => {
   return (

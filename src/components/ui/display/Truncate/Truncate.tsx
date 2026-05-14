@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useResizeObserver } from "@/hooks/useGlobalResizeObserver";
-import {
-  Tooltip,
+import Tooltip, {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./../Tooltip/Tooltip";
+} from "@components/ui/display/Tooltip/Tooltip";
 import { cn } from "@/lib/utils";
 
 export interface TruncateProps extends React.HTMLAttributes<HTMLDivElement> {

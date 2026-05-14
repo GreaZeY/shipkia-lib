@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
-import Checkbox from "./Checkbox";
-import { cn } from "../../../../lib/utils";
-import Box from "../../containers/Box/Box";
+import Checkbox from "@components/ui/inputs/Checkbox/Checkbox";
+import { cn } from "@lib/utils";
+import Box from "@components/ui/containers/Box/Box";
 
 export interface CheckboxOption {
   id: string;

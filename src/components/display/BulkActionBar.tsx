@@ -1,8 +1,8 @@
 import React from "react";
 import { Trash, Edit, UserPlus, Tag, X } from "lucide-react";
-import Button from "../ui/inputs/Button/Button";
-import Box from "../ui/containers/Box/Box";
-import Card from "../ui/containers/Card/Card";
+import Button from "@components/ui/inputs/Button/Button";
+import Box from "@components/ui/containers/Box/Box";
+import Card from "@components/ui/containers/Card/Card";
 
 interface BulkActionBarProps {
   selectedCount: number;

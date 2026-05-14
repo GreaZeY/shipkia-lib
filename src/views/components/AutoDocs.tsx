@@ -1,16 +1,16 @@
 import { Suspense, lazy, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import metadata from "../../lib/docs/metadata.json";
-import Button from "../../components/ui/inputs/Button/Button";
+import metadata from "@lib/docs/metadata.json";
+import Button from "@components/ui/inputs/Button/Button";
 import { Info, Layers } from "lucide-react";
-import Label from "../../components/ui/typography/Label/Label";
-import Container from "../../components/ui/containers/Container/Container";
-import Box from "../../components/ui/containers/Box/Box";
-import Card from "../../components/ui/containers/Card/Card";
-import { autoDocsConfig } from "./AutoDocsConfig";
-import Skeleton from "../../components/ui/display/Skeleton/Skeleton";
-import { TooltipProvider } from "../../components/ui/display/Tooltip/Tooltip";
-import { cn } from "../../lib/utils";
+import Label from "@components/ui/typography/Label/Label";
+import Container from "@components/ui/containers/Container/Container";
+import Box from "@components/ui/containers/Box/Box";
+import Card from "@components/ui/containers/Card/Card";
+import { autoDocsConfig } from "@/views/components/AutoDocsConfig";
+import Skeleton from "@components/ui/display/Skeleton/Skeleton";
+import { TooltipProvider } from "@components/ui/display/Tooltip/Tooltip";
+import { cn } from "@lib/utils";
 
 interface DocPropType {
   name: string;

@@ -1,8 +1,8 @@
 import * as React from "react";
-import { type FormConfig } from "./types";
-import { useForm, FormContext, type UseFormOptions } from "../../../../hooks/useFormBuilder";
-import FieldRenderer from "./FieldRenderer";
-import Box from "../../../../components/ui/containers/Box/Box";
+import { type FormConfig } from "@components/ui/forms/FormBuilder/types";
+import { useForm, FormContext, type UseFormOptions } from "@/hooks/useFormBuilder";
+import FieldRenderer from "@components/ui/forms/FormBuilder/FieldRenderer";
+import Box from "@components/ui/containers/Box/Box";
 
 export interface FormBuilderProps extends UseFormOptions {
   config: FormConfig;

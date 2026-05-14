@@ -1,4 +1,4 @@
-import type { FieldType } from "../../forms/FormBuilder/types";
+import type { FieldType } from "@components/ui/forms/FormBuilder/types";
 import type { ReactiveRule } from "@/framework/reactive/engine";
 
 export type GridRowData = Record<string, unknown>;

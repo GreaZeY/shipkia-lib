@@ -5,15 +5,14 @@ import {
   useAutocomplete,
   type UseAutocompleteProps,
 } from "@/hooks/useAutocomplete";
-import {
-  Popover,
+import Popover, {
   PopoverContent,
   PopoverTrigger,
-} from "../../containers/Popover/Popover";
-import Box from "../../containers/Box/Box";
-import Chip from "../../display/Chip/Chip";
+} from "@components/ui/containers/Popover/Popover";
+import Box from "@components/ui/containers/Box/Box";
+import Chip from "@components/ui/display/Chip/Chip";
 import { useListNavigation } from "@/hooks/useListNavigation";
-import Skeleton from "../../display/Skeleton/Skeleton";
+import Skeleton from "@components/ui/display/Skeleton/Skeleton";
 
 // Lazy load the virtualized list to keep the initial bundle small
 const VirtualizedList = React.lazy(() => import("../Select/VirtualizedList"));
