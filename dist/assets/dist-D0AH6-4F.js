@@ -1,0 +1,1 @@
+import{r as e,t}from"./react-DDl46iVI.js";import{s as n}from"./dist-DZ_8rQch.js";var r=e(t(),1),i=r.useId||(()=>void 0),a=0;function o(e){let[t,o]=r.useState(i());return n(()=>{e||o(e=>e??String(a++))},[e]),e||(t?`radix-${t}`:``)}export{o as t};

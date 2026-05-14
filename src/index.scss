@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;700&display=swap');
+
+@layer base {
+  :root {
+     /* Buopso Light Mode — Refined Slate neutrals with depth */
+    --background: 210 40% 98.5%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    /* Signature Lime Green Primary - Refined for better luminance */
+    --primary: 82 100% 34%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 82 85% 67%;
+    --accent-foreground: 92 100% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 70.6% 45.3%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+
+    /* Substantial borders for better visibility in light mode */
+    --border: 220 13% 85%;
+    --input: 220 13% 85%;
+    --ring: 82 100% 34%;
+
+    --radius: 0.75rem;
+
+    /* Surface Hierarchy (Light) */
+    --surface-1: 210 40% 99%;
+    --surface-2: 0 0% 100%;
+    --surface-3: 220 14.3% 97%;
+
+    /* Premium Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-premium: 0 10px 15px -3px rgb(0 0 0 / 0.04), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  }
+
+  .dark {
+    /* Buopso Dark Mode — Deep premium Zinc neutrals */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 4.5%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 5%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Lime stays vibrant in dark mode */
+    --primary: 82 85% 67%;
+    --primary-foreground: 240 10% 3.9%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 82 85% 67%;
+    --accent-foreground: 92 100% 11%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 70.6% 45.3%;
+    --success-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 82 85% 67%;
+
+    /* Surface Hierarchy (Dark) */
+    --surface-1: 240 10% 6%;
+    --surface-2: 240 10% 8%;
+    --surface-3: 240 10% 10%;
+
+    /* Premium Shadows (Dark) */
+    --shadow-premium: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply antialiased selection:bg-primary/20 selection:text-primary;
+    font-family: 'Manrope', 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-bold text-foreground/90;
+  }
+}
+
+@layer components {
+  /* Flex Center */
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  /* Card Standard */
+  .card-standard {
+    @apply bg-card rounded-lg border shadow-sm p-6;
+  }
+
+  /* Card Premium */
+  .card-premium {
+    @apply rounded-lg border border-border/50 bg-card shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  /* Section Header */
+  .section-header {
+    @apply text-xl font-bold text-foreground flex items-center mb-6;
+  }
+
+  /* Status Badges */
+  .badge-success {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20;
+  }
+
+  .badge-error {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-destructive border border-destructive/20;
+  }
+
+  .badge-warning {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning/10 text-warning border border-warning/20;
+  }
+
+  /* Custom snippet logic */
+  .accent-green { background-color: hsl(var(--primary)); }
+  .text-accent-green { color: hsl(var(--success)); }
+  .border-accent-green { border-color: hsl(var(--primary)); }
+
+  /* Smooth Scrollbar - Ultra Thin Overlay */
+  .custom-scrollbar {
+    /* Overlay logic: scrollbar sits on top of content without taking space */
+    overflow: auto !important;
+    overflow: overlay !important; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3) !important;
+    border-radius: 10px !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.6) !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-button {
+    display: none !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent !important;
+  }
+
+  /* Loading Skeleton */
+  .skeleton {
+    @apply relative overflow-hidden bg-muted/50 rounded;
+  }
+
+  .skeleton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--muted-foreground) / 0.05) 50%,
+      transparent 100%
+    );
+    animation: skeleton-shimmer 2s infinite ease-in-out;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+}
+
+@layer utilities {
+  /* Custom Hairline Border */
+  .border-hairline {
+    border-width: 0.5px;
+  }
+
+  /* Glassmorphism subtle */
+  .glass-subtle {
+    @apply bg-card/60 backdrop-blur-md border border-border/20;
+  }
+
+  /* Water Lensing Effect — Liquid Glass (Reference-matched) */
+  .water-lens {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.03);
+  }
+
+  .dark .water-lens {
+    background: rgba(0, 0, 0, 0.582);
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* Manual Drawer Animations (Safety Fallback) */
+  [data-state="open"].drawer-right { animation: drawer-slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  [data-state="closed"].drawer-right { animation: drawer-slide-out-right 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  
+  @keyframes drawer-slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes drawer-slide-out-right {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+
+  /* View Transitions API configuration for theme switcher */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+  ::view-transition-new(root) {
+    z-index: 9999;
+  }
+
+  /* Hide Spin Buttons for Numeric/Decimal Inputs (using custom UI) */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox default appearance */
+  }
+
+  /* Hide native search cancel button (cross icon) */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}

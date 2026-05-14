@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <title>client</title>
+    <script>
+      //This prevents theme colors shift when app loads
+      (function() {
+        try {
+          var savedTheme = localStorage.getItem('theme');
+          var isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-RXv9qSDV.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-DDl46iVI.js">
+    <link rel="modulepreload" crossorigin href="/assets/preload-helper-DWTEM3RW.js">
+    <link rel="modulepreload" crossorigin href="/assets/bus-CnA1u0qZ.js">
+    <link rel="modulepreload" crossorigin href="/assets/registry-DipVvcMX.js">
+    <link rel="modulepreload" crossorigin href="/assets/boot-CU9ZIRqO.js">
+    <link rel="modulepreload" crossorigin href="/assets/react-dom-DhXqmKVu.js">
+    <link rel="modulepreload" crossorigin href="/assets/jsx-runtime-qkFaHFuZ.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CQW_qAhv.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
