@@ -85,6 +85,19 @@ const devRoutes = import.meta.env.DEV
             ),
           },
           {
+            path: "reactive-engine",
+            element: (
+              <Suspense fallback={null}>
+                {(() => {
+                  const ReactiveEngineDocs = lazy(
+                    () => import("@/views/components/ReactiveEngineDocs"),
+                  );
+                  return <ReactiveEngineDocs />;
+                })()}
+              </Suspense>
+            ),
+          },
+          {
             path: ":componentName",
             element: (
               <Suspense fallback={null}>

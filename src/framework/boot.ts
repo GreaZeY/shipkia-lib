@@ -19,7 +19,7 @@ type SidebarSubscriber = (items: SidebarItem[]) => void;
  * Core framework singleton that bootstraps applications, manages registries,
  * and maintains global UI state (sidebar, routes, themes).
  */
-export class BuopsoApplication {
+export class Application {
   private _sidebarItems: SidebarItem[] = [];
   private _appRoutes: RouteConfig[] = [];
   private _themeOverrides: AppConfig["theme"] = {};
@@ -177,4 +177,4 @@ export class BuopsoApplication {
 }
 
 // Export the framework singleton instance
-export const app = new BuopsoApplication();
+export const app = new Application();

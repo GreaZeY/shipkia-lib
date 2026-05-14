@@ -21,6 +21,7 @@ import {
   Users,
   DollarSign,
   Settings,
+  Zap,
 } from "lucide-react";
 import metadata from "@/lib/docs/metadata.json";
 import { cn } from "@/lib/utils";
@@ -63,6 +64,11 @@ const Sidebar = () => {
           label: "Theme",
           icon: <Layers size={16} />,
           path: "/docs/theme-palette",
+        },
+        {
+          label: "Reactive Engine",
+          icon: <Zap size={16} />,
+          path: "/docs/reactive-engine",
         },
         {
           type: "seperator",
@@ -111,7 +117,9 @@ const Sidebar = () => {
       }))
     : [];
 
-  const [dynamicSidebarItems, setDynamicSidebarItems] = useState(app.sidebarItems);
+  const [dynamicSidebarItems, setDynamicSidebarItems] = useState(
+    app.sidebarItems,
+  );
 
   useEffect(() => {
     return app.subscribeSidebar((items) => {

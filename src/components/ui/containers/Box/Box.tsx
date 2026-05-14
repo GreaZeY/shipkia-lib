@@ -2,14 +2,14 @@ import * as React from "react";
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const boxVariants = cva("min-w-0 transition-all", {
+const boxVariants = cva("transition-all", {
   variants: {
     display: {
-      flex: "flex",
+      flex: "flex min-w-0",
       grid: "grid",
       block: "block",
       inline: "inline",
-      inlineFlex: "inline-flex",
+      inlineFlex: "inline-flex min-w-0",
       none: "hidden",
     },
     direction: {

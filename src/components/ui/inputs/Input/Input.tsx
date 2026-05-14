@@ -327,7 +327,7 @@ const Input = ({
         {showSpinButtons && (
           <div
             className={cn(
-              "absolute right-1 top-1/2 flex -translate-y-1/2 flex-col",
+              "absolute right-3 top-1/2 flex -translate-y-1/2 flex-col",
               size === "sm" ? "space-y-0" : "space-y-0.5",
             )}
           >
