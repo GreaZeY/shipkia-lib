@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppState } from "@/hooks/useAppState";
-import { getAppSidebarItems } from "@/framework/boot";
+import { getAppSidebarItems, subscribeSidebar } from "@/framework/boot";
+import { useState, useEffect } from "react";
 import Accordion, {
   AccordionItem,
   AccordionTrigger,
@@ -51,21 +52,23 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navItems = [
-    {
-      label: "Introduction",
-      icon: <BookOpen size={16} />,
-      path: "/docs/intro",
-    },
-    {
-      label: "Theme",
-      icon: <Layers size={16} />,
-      path: "theme-palette",
-    },
-    {
-      type: "seperator",
-    },
-  ];
+  const navItems = import.meta.env.DEV
+    ? [
+        {
+          label: "Introduction",
+          icon: <BookOpen size={16} />,
+          path: "/docs/intro",
+        },
+        {
+          label: "Theme",
+          icon: <Layers size={16} />,
+          path: "/docs/theme-palette",
+        },
+        {
+          type: "seperator",
+        },
+      ]
+    : [];
 
   const allComponentMeta = Object.values(metadata);
 
@@ -99,15 +102,25 @@ const Sidebar = () => {
     }
   };
 
-  const componentItems = Object.keys(categories).map((cat) => ({
-    label: cat,
-    icon: getCategoryIcon(cat),
-    path: `#${cat.toLowerCase()}`,
-    children: categories[cat],
-  }));
+  const componentItems = import.meta.env.DEV
+    ? Object.keys(categories).map((cat) => ({
+        label: cat,
+        icon: getCategoryIcon(cat),
+        path: `#${cat.toLowerCase()}`,
+        children: categories[cat],
+      }))
+    : [];
 
-  // Merge app-contributed sidebar items
-  const appSidebarItems = getAppSidebarItems().map((item) => ({
+  const [dynamicSidebarItems, setDynamicSidebarItems] = useState(getAppSidebarItems());
+
+  useEffect(() => {
+    return subscribeSidebar((items) => {
+      setDynamicSidebarItems(items);
+    });
+  }, []);
+
+  // Map dynamic sidebar items into rendering structure
+  const appSection = dynamicSidebarItems.map((item) => ({
     label: item.label,
     icon: resolveIcon(item.icon),
     path: item.route,
@@ -117,12 +130,11 @@ const Sidebar = () => {
     })),
   }));
 
-  const appSection =
-    appSidebarItems.length > 0
-      ? [{ type: "seperator" as const }, ...appSidebarItems]
-      : [];
+  const isDocsRoute = location.pathname.startsWith("/docs");
 
-  const items = [...navItems, ...componentItems, ...appSection];
+  const items = isDocsRoute
+    ? [...navItems, ...componentItems]
+    : [...appSection];
 
   return (
     <aside className="py-3">

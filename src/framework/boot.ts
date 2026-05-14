@@ -21,6 +21,21 @@ let _appRoutes: RouteConfig[] = [];
 /** Collected theme overrides. */
 let _themeOverrides: AppConfig["theme"] = {};
 
+type SidebarSubscriber = (items: SidebarItem[]) => void;
+const _sidebarSubscribers = new Set<SidebarSubscriber>();
+
+export function setAppSidebarItems(items: SidebarItem[]) {
+  _sidebarItems = items;
+  _sidebarSubscribers.forEach((cb) => cb([..._sidebarItems]));
+}
+
+export function subscribeSidebar(cb: SidebarSubscriber) {
+  _sidebarSubscribers.add(cb);
+  return () => {
+    _sidebarSubscribers.delete(cb);
+  };
+}
+
 /**
  * Boot the framework.
  * Section 8 of LLD: "Module discovered -> registries updated -> metadata compiled"

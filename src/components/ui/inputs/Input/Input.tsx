@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { type VariantProps } from "class-variance-authority";
 import {
@@ -10,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { inputVariants } from "@components/ui/inputs/Input/Input.styles";
 import { useFloatingLabel } from "@/hooks/useFloatingLabel";
+import { useImperativeHandle } from "react";
 
 export { type InputType, type ValidationTrigger, type InputChangeData };
 
@@ -190,7 +190,7 @@ const Input = ({
   });
 
   // Expose the internal ref to the parent
-  React.useImperativeHandle(ref, () => inputRef.current!);
+  useImperativeHandle(ref, () => inputRef.current!);
 
   // Determine which error to show (external override takes precedence)
   const displayError = externalError || internalError;

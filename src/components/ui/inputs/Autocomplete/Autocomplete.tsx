@@ -98,13 +98,14 @@ const Autocomplete = ({
 
   // Handle keyboard navigation
   const { activeIndex, handleKeyDown: handleListKeyDown } = useListNavigation({
-    options: filteredOptions,
-    onSelect: handleSelect,
+    itemCount: filteredOptions.length,
+    onSelect: (index) => handleSelect(filteredOptions[index].id),
     isOpen,
-    setIsOpen,
+    onClose: () => setIsOpen(false),
+    onOpen: () => setIsOpen(true),
   });
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (
       e.key === "Backspace" &&
       searchQuery === "" &&

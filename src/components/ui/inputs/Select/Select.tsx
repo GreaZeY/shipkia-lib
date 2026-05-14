@@ -202,7 +202,7 @@ const Select = ({
           <fieldset
             aria-hidden="true"
             className={cn(
-              "pointer-events-none absolute inset-0 z-10 m-0 rounded-full border-2 transition-all duration-200",
+              "pointer-events-none absolute inset-0 z-10 m-0 rounded-full border transition-all duration-200",
               isOpen || isFocused
                 ? "border-primary ring-2 ring-primary/10"
                 : "border-input",
