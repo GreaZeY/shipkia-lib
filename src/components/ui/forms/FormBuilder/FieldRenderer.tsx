@@ -43,9 +43,9 @@ export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
     componentProps.onValueChange = onChange;
   } else {
     // text, email, number, password, etc.
-    componentProps.value = value || "";
-    componentProps.onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      let val: string | number = e.target.value;
+    componentProps.value = value ?? "";
+    componentProps.onChange = (data: { value: string }) => {
+      let val: string | number = data.value;
       if (field.type === "number" && val) val = Number(val);
       onChange(val);
     };
