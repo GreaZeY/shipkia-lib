@@ -6,12 +6,7 @@ export {
   hasOverride,
   getRegisteredKeys,
 } from "@framework/registry";
-export {
-  bootFramework,
-  getAppSidebarItems,
-  getAppRoutes,
-  getThemeOverrides,
-} from "@framework/boot";
+export { app } from "@framework/boot";
 // export { installedApps } from "@framework/app-manifest";
 export { useShell } from "@framework/runtime/shell";
 export type {

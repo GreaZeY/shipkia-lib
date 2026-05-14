@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppState } from "@/hooks/useAppState";
-import { getAppSidebarItems, subscribeSidebar } from "@/framework/boot";
+import { app } from "@/framework/boot";
 import { useState, useEffect } from "react";
 import Accordion, {
   AccordionItem,
@@ -111,10 +111,10 @@ const Sidebar = () => {
       }))
     : [];
 
-  const [dynamicSidebarItems, setDynamicSidebarItems] = useState(getAppSidebarItems());
+  const [dynamicSidebarItems, setDynamicSidebarItems] = useState(app.sidebarItems);
 
   useEffect(() => {
-    return subscribeSidebar((items) => {
+    return app.subscribeSidebar((items) => {
       setDynamicSidebarItems(items);
     });
   }, []);

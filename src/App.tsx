@@ -4,7 +4,7 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import { getAppRoutes, setAppSidebarItems } from "@/framework/boot";
+import { app } from "@/framework/boot";
 import { resolve } from "@/framework/registry";
 
 // App Layout
@@ -25,7 +25,7 @@ const { ListViewPage, FormViewPage } = await import("@/views/DocTypePage").then(
 );
 
 // Build dynamic routes from installed apps
-const appRoutes = getAppRoutes().map((route) => ({
+const appRoutes = app.routes.map((route) => ({
   path: route.path,
   element: (
     <Suspense
@@ -41,7 +41,7 @@ const appRoutes = getAppRoutes().map((route) => ({
 }));
 
 // Initialize the Shipping App Sidebar Items
-setAppSidebarItems([
+app.setSidebarItems([
   { label: "Dashboard", icon: "layout-grid", route: "/dashboard" },
   { label: "Orders", icon: "package", route: "/orders" },
   { label: "ndr", icon: "truck", route: "/ndr" },

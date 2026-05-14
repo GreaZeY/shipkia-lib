@@ -1,12 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-// import { bootFramework } from "@/framework";
+// import { app } from "@/framework";
 import Shell from "@/components/ui/Shell";
 import "./index.scss";
 
 // Phase 1: Boot framework — load all app configs, populate registry, apply theme.
 // This completes BEFORE React renders, guaranteeing no flash of default UI.
-// await bootFramework(installedApps);
+// await app.boot(installedApps);
 
 // Phase 2: Dynamic import of App AFTER boot — ensures resolve() sees the full registry.
 const { default: App } = await import("@/App.tsx");
