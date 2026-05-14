@@ -68,16 +68,24 @@ const Chip = ({
       )}
       <span className="truncate">{children || label}</span>
       {onRemove && (
-        <button
-          type="button"
+        <span
+          role="button"
+          tabIndex={0}
           onClick={(e) => {
             e.stopPropagation();
             onRemove();
           }}
-          className="ml-0.5 rounded-full p-0.5 hover:bg-black/5 dark:hover:bg-white/10"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              e.stopPropagation();
+              onRemove();
+            }
+          }}
+          className="ml-0.5 rounded-full p-0.5 hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
         >
           <X size={10} strokeWidth={3} />
-        </button>
+        </span>
       )}
     </Box>
   );
