@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 const labelVariants = cva("transition-colors duration-200", {
   variants: {
     variant: {
-      heading: "text-xl text-foreground",
-      subheading: "text-l text-muted-foreground",
-      title: "text-title-large text-foreground",
-      subtitle: "text-title-medium text-muted-foreground",
-      body: "text-body-large text-foreground",
-      label: "text-xs text-muted-foreground tracking-widest",
+      heading: "text-[16px] text-foreground",
+      subheading: "text-[14px] text-muted-foreground",
+      title: "text-[14px] text-foreground",
+      subtitle: "text-[12px] text-muted-foreground",
+      body: "text-[12px] text-foreground",
+      label: "text-[10px] text-muted-foreground tracking-widest",
       input: "text-[8px] text-muted-foreground tracking-wider",
     },
   },
