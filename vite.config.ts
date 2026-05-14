@@ -21,11 +21,9 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@lib": path.resolve(__dirname, "./src/lib"),
+      "@components": path.resolve(__dirname, "./src/components"),
       "@framework": path.resolve(__dirname, "./src/framework"),
-      "@shipkia": path.resolve(__dirname, "../../../user_apps/shipkia"),
-      "@user_apps": path.resolve(__dirname, "../../../user_apps"),
-      react: path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
   },
 });
