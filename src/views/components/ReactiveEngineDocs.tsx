@@ -26,6 +26,8 @@ import FormBuilder from "@components/ui/forms/FormBuilder/FormBuilder";
 import type { FormConfig } from "@components/ui/forms/FormBuilder/types";
 import Button from "@components/ui/inputs/Button/Button";
 import Tabs from "@components/ui/containers/Tabs/Tabs";
+import { Highlight, themes } from "prism-react-renderer";
+import { cn } from "@/lib/utils";
 
 // ─── Demo Data ───
 
@@ -497,6 +499,9 @@ type TabId =
   | "actions"
   | "formulas"
   | "hooks"
+  | "registry"
+  | "security"
+  | "performance"
   | "playground";
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
@@ -506,6 +511,9 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: "actions", label: "Actions", icon: <Zap size={14} /> },
   { id: "formulas", label: "Formulas", icon: <Settings size={14} /> },
   { id: "hooks", label: "Hooks", icon: <Layers size={14} /> },
+  { id: "registry", label: "Registry", icon: <Lock size={14} /> },
+  { id: "security", label: "Security", icon: <Lock size={14} /> },
+  { id: "performance", label: "Performance", icon: <Cpu size={14} /> },
   { id: "playground", label: "Playground", icon: <Eye size={14} /> },
 ];
 
@@ -570,6 +578,35 @@ const ReactiveEngineDocs = () => {
             title="React Hooks"
             subtitle="Subscribe to field values and states from any component inside FormContext."
             code={CODE_SNIPPETS.hooks}
+          />
+        )}
+        {tab.id === "registry" && (
+          <CodeTab
+            title="Registry Internals"
+            subtitle="How operators are stored and looked up at runtime."
+            code={`// Condition Registry
+const conditionRegistry = new Map<string, ConditionEvaluator>();
+
+// Action Registry
+const actionRegistry = new Map<string, ActionExecutor>();`}
+          />
+        )}
+        {tab.id === "security" && (
+          <CodeTab
+            title="Security & Validation"
+            subtitle="Ensuring JSON rules are safe to evaluate."
+            code={`// Rules are validated against a strict schema
+// Only registered operators can be executed
+// No eval() or dynamic JS execution used`}
+          />
+        )}
+        {tab.id === "performance" && (
+          <CodeTab
+            title="Performance Metrics"
+            subtitle="Optimized for high-frequency updates."
+            code={`// Batch updates to minimize renders
+// 0ms evaluation for typical rule sets
+// Memoized logic trees`}
           />
         )}
         {tab.id === "playground" && (
@@ -692,6 +729,7 @@ const ReactiveEngineDocs = () => {
         defaultValue="overview"
         variant="enclosed"
         keepMounted
+        // contentMaxHeight="600px"
         items={tabItems}
       />
     </Box>
@@ -809,10 +847,12 @@ const CodeTab = ({
   title,
   subtitle,
   code,
+  language = "tsx",
 }: {
   title: string;
   subtitle: string;
   code: string;
+  language?: string;
 }) => (
   <Card
     variant="default"
@@ -826,11 +866,40 @@ const CodeTab = ({
         {title}
       </Label>
       <Label variant="subtitle">{subtitle}</Label>
-      <pre className="overflow-x-auto rounded-lg bg-muted/50 p-4 text-[11px] leading-relaxed font-mono text-foreground">
-        {code}
-      </pre>
+      <Highlighter code={code} language={language} />
     </Box>
   </Card>
+);
+
+const Highlighter = ({
+  code,
+  language = "tsx",
+}: {
+  code: string;
+  language?: string;
+}) => (
+  <Highlight theme={themes.vsDark} code={code.trim()} language={language}>
+    {({ className, style, tokens, getLineProps, getTokenProps }) => (
+      <pre
+        className={cn(
+          className,
+          "custom-scrollbar overflow-x-auto rounded-xl p-4 font-mono text-[11px] leading-relaxed",
+        )}
+        style={style}
+      >
+        {tokens.map((line, i) => (
+          <div key={i} {...getLineProps({ line })}>
+            <span className="mr-4 inline-block w-4 select-none text-right text-muted-foreground/40">
+              {i + 1}
+            </span>
+            {line.map((token, key) => (
+              <span key={key} {...getTokenProps({ token })} />
+            ))}
+          </div>
+        ))}
+      </pre>
+    )}
+  </Highlight>
 );
 
 const ConceptCard = ({

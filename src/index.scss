@@ -283,6 +283,14 @@
     appearance: none;
   }
 
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   /* Tab Animations */
   @keyframes tab-in {
     from { opacity: 0; transform: translateY(4px); }
