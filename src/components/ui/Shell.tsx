@@ -11,7 +11,7 @@ interface ShellProps {
  * Section 5 of LLD: "Shell Runtime -> Dependency Injection Runtime -> ... -> Projection Components"
  * This is the root of the "Frontend OS".
  */
-export function Shell({ children }: ShellProps) {
+export default function Shell({ children }: ShellProps) {
   // Ensure core services are available globally
   // In a real boot flow, this would happen in bootFramework()
   React.useEffect(() => {

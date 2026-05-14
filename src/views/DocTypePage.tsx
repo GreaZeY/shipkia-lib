@@ -8,7 +8,7 @@ const DefaultFormView = lazy(() => import("./form/BaseFormView"));
 /**
  * ListViewPage - Dynamic resolver for DocType List Views.
  */
-export const ListViewPage: React.FC = () => {
+const ListViewPage: React.FC = () => {
   const { doctype } = useParams<{ doctype: string }>();
   if (!doctype) return null;
 
@@ -24,7 +24,7 @@ export const ListViewPage: React.FC = () => {
 /**
  * FormViewPage - Dynamic resolver for DocType Form/Detail Views.
  */
-export const FormViewPage: React.FC = () => {
+const FormViewPage: React.FC = () => {
   const { doctype, name } = useParams<{ doctype: string; name: string }>();
   if (!doctype || !name) return null;
 
@@ -36,3 +36,5 @@ export const FormViewPage: React.FC = () => {
     </Suspense>
   );
 };
+
+export default { ListViewPage, FormViewPage };

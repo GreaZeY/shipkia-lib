@@ -15,7 +15,7 @@ import type {
   GridRowData,
 } from "./types";
 import { resolve } from "@/framework/registry";
-import { DefaultCellRenderer } from "./DefaultCellRenderer";
+import DefaultCellRenderer from "./DefaultCellRenderer";
 import Checkbox from "@/components/ui/inputs/Checkbox/Checkbox";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useGridNavigation } from "@/hooks/useGridNavigation";
@@ -149,7 +149,7 @@ const GridRow = React.memo(
 );
 GridRow.displayName = "GridRow";
 
-export const VirtualizedGrid: React.FC<GridProps> = ({
+const VirtualizedGrid: React.FC<GridProps> = ({
   columns,
   data,
   rowKey = "id",
@@ -611,3 +611,5 @@ export const VirtualizedGrid: React.FC<GridProps> = ({
     </div>
   );
 };
+
+export default VirtualizedGrid;

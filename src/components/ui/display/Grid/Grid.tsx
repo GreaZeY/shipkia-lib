@@ -13,7 +13,7 @@ import type {
   GridRowData,
 } from "./types";
 import { resolve } from "@/framework/registry";
-import { DefaultCellRenderer } from "./DefaultCellRenderer";
+import DefaultCellRenderer from "./DefaultCellRenderer";
 import Checkbox from "../../inputs/Checkbox/Checkbox";
 import { useGridNavigation } from "@/hooks/useGridNavigation";
 import Truncate from "../Truncate/Truncate";
@@ -146,7 +146,7 @@ const GridRow = React.memo(
 );
 GridRow.displayName = "GridRow";
 
-export const Grid: React.FC<GridProps> = ({
+const Grid: React.FC<GridProps> = ({
   columns,
   data,
   rowKey = "id",
@@ -574,3 +574,5 @@ export const Grid: React.FC<GridProps> = ({
     </div>
   );
 };
+
+export default Grid;

@@ -13,7 +13,7 @@ export interface SelectTriggerProps extends Omit<ButtonProps, "variant"> {
   variant?: "outline" | "button" | "ghost";
 }
 
-export const SelectTrigger = React.forwardRef<
+const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
   SelectTriggerProps
 >(
@@ -68,3 +68,5 @@ export const SelectTrigger = React.forwardRef<
 );
 
 SelectTrigger.displayName = "SelectTrigger";
+
+export default SelectTrigger;

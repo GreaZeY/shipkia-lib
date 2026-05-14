@@ -5,9 +5,9 @@ import type {
   GridColumn,
   GridRowData,
 } from "@/components/ui/display/Grid/types";
-import { Grid } from "@/components/ui/display/Grid/Grid";
+import Grid from "@/components/ui/display/Grid/Grid";
 import type { FieldType } from "@/components/ui/forms/FormBuilder/types";
-import { DefaultCellRenderer } from "@/components/ui/display/Grid/DefaultCellRenderer";
+import DefaultCellRenderer from "@/components/ui/display/Grid/DefaultCellRenderer";
 import { FieldRegistry } from "@/components/ui/forms/FormBuilder/fieldRegistry";
 import { ReactiveEngine } from "@/framework/reactive/engine";
 import { Transaction } from "@/framework/runtime/transaction";
@@ -135,7 +135,7 @@ const CellEditor = ({
   );
 };
 
-export const EditableGrid: React.FC<EditableGridProps> = ({
+const EditableGrid: React.FC<EditableGridProps> = ({
   columns,
   data: propData,
   onCellChange,
@@ -240,3 +240,5 @@ export const EditableGrid: React.FC<EditableGridProps> = ({
     </div>
   );
 };
+
+export default EditableGrid;

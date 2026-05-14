@@ -12,7 +12,7 @@ export interface SelectItemProps extends React.ButtonHTMLAttributes<HTMLButtonEl
   onClick?: () => void;
 }
 
-export const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
+const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
   (
     { option, isSelected, isFocused, onClick, className, style, ...props },
     ref,
@@ -62,3 +62,5 @@ export const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
 );
 
 SelectItem.displayName = "SelectItem";
+
+export default SelectItem;

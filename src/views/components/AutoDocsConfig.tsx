@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../../components/ui/display/Tooltip/Tooltip";
-import { VirtualizedGrid } from "../../components/ui/display/Grid/VirtualizedGrid";
+import VirtualizedGrid from "../../components/ui/display/Grid/VirtualizedGrid";
 export interface PreviewConfig {
   defaultProps?: Record<string, unknown>;
   renderAll?: string[];

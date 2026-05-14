@@ -4,7 +4,7 @@ import Chip from "@/components/ui/display/Chip/Chip";
 import Checkbox from "@/components/ui/inputs/Checkbox/Checkbox";
 import Truncate from "@/components/ui/display/Truncate/Truncate";
 
-export const DefaultCellRenderer: React.FC<GridCellRendererProps> = ({
+const DefaultCellRenderer: React.FC<GridCellRendererProps> = ({
   value,
   column,
 }) => {
@@ -43,3 +43,5 @@ export const DefaultCellRenderer: React.FC<GridCellRendererProps> = ({
 
   return <span className="text-sm">{String(value)}</span>;
 };
+
+export default DefaultCellRenderer;

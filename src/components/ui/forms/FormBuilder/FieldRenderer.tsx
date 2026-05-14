@@ -4,7 +4,7 @@ import { FieldRegistry } from "./fieldRegistry";
 import Box from "@/components/ui/containers/Box/Box";
 import { useFormContext, useFieldState } from "@/hooks/useFormBuilder";
 
-export function FieldRenderer({ field }: { field: FormFieldConfig }) {
+export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
   const { register } = useFormContext();
   const { value, visible, disabled } = useFieldState(field.name);
   

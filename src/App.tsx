@@ -23,7 +23,7 @@ const AutoDocs = resolve(
   "view:autodocs",
   lazy(() => import("@/views/components/AutoDocs")),
 );
-const { ListViewPage, FormViewPage } = await import("@/views/DocTypePage");
+const { ListViewPage, FormViewPage } = (await import("@/views/DocTypePage")).default;
 
 // Build dynamic routes from installed apps
 const appRoutes = getAppRoutes().map((route) => ({

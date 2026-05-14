@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Plus, Search, Filter, MoreVertical, Download, Upload } from "lucide-react";
-import { EditableGrid } from "@/components/ui/display/Grid/EditableGrid";
+import EditableGrid from "@/components/ui/display/Grid/EditableGrid";
 import type { GridColumn } from "@/components/ui/display/Grid/types";
 import Button from "@/components/ui/inputs/Button/Button";
 import Input, { type InputChangeData } from "@/components/ui/inputs/Input/Input";

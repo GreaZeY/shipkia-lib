@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type FormConfig } from "./types";
 import { useForm, FormContext, type UseFormOptions } from "../../../../hooks/useFormBuilder";
-import { FieldRenderer } from "./FieldRenderer";
+import FieldRenderer from "./FieldRenderer";
 import Box from "../../../../components/ui/containers/Box/Box";
 
 export interface FormBuilderProps extends UseFormOptions {
@@ -11,7 +11,7 @@ export interface FormBuilderProps extends UseFormOptions {
   form?: ReturnType<typeof useForm>; // Optional external form instance
 }
 
-export function FormBuilder({
+export default function FormBuilder({
   config,
   defaultValues,
   onSubmit,

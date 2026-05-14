@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowLeft, Save, Trash, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { FormBuilder } from "../../components/ui/forms/FormBuilder/FormBuilder";
+import FormBuilder from "../../components/ui/forms/FormBuilder/FormBuilder";
 import Button from "../../components/ui/inputs/Button/Button";
 import Box from "../../components/ui/containers/Box/Box";
 import Container from "../../components/ui/containers/Container/Container";

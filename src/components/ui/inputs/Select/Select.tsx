@@ -2,15 +2,14 @@ import * as React from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSelect, type SelectOption } from "@/hooks/useSelect";
-import {
-  Popover,
+import Popover, {
   PopoverContent,
   PopoverTrigger,
 } from "../../containers/Popover/Popover";
 import Box from "../../containers/Box/Box";
 import Chip from "../../display/Chip/Chip";
 import Input from "../Input/Input";
-import { SelectTrigger } from "./SelectTrigger";
+import SelectTrigger from "./SelectTrigger";
 import { useListNavigation } from "@/hooks/useListNavigation";
 import Skeleton from "../../display/Skeleton/Skeleton";
 

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 // import { bootFramework } from "@/framework";
-import { Shell } from "@/components/ui/Shell";
+import Shell from "@/components/ui/Shell";
 import "./index.scss";
 
 // Phase 1: Boot framework — load all app configs, populate registry, apply theme.
