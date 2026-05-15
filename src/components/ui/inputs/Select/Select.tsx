@@ -125,10 +125,7 @@ const Select = ({
     onSelect: (index) => handleSelect(filteredOptions[index].id),
     onClose: () => setIsOpen(false),
     onOpen: () => setIsOpen(true),
-    initialIndex:
-      selectedOptions.length > 0
-        ? options.findIndex((opt) => opt.id === selectedOptions[0].id)
-        : 0,
+    initialIndex: -1,
   });
 
   const handleSearchChange = (val: string) => {
@@ -146,10 +143,7 @@ const Select = ({
     }
 
     if (multi) {
-      const visibleOptions =
-        isOpen || isFocused
-          ? selectedOptions
-          : selectedOptions.slice(0, maxVisibleChips);
+      const visibleOptions = selectedOptions.slice(0, maxVisibleChips);
       const remainingCount = selectedOptions.length - visibleOptions.length;
 
       return (
@@ -157,8 +151,7 @@ const Select = ({
           display="flex"
           align="center"
           gap="xs"
-          wrap
-          className="max-w-full overflow-hidden"
+          className="max-w-full overflow-hidden whitespace-nowrap"
         >
           {visibleOptions.map((opt) => (
             <Chip
@@ -168,12 +161,13 @@ const Select = ({
                 removeValue(opt.id);
               }}
               icon={opt.icon}
+              className="flex-none"
             >
               {opt.label}
             </Chip>
           ))}
           {remainingCount > 0 && (
-            <Chip variant="secondary">+{remainingCount}</Chip>
+            <Chip variant="secondary" className="flex-none">+{remainingCount}</Chip>
           )}
         </Box>
       );

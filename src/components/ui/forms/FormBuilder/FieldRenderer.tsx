@@ -6,8 +6,13 @@ import { useFormContext, useFieldState } from "@/hooks/useFormBuilder";
 
 export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
   const { register } = useFormContext();
-  const { value, visible, disabled, options: dynamicOptions } = useFieldState(field.name);
-  
+  const {
+    value,
+    visible,
+    disabled,
+    options: dynamicOptions,
+  } = useFieldState(field.name);
+
   // Section 24: Dynamic Visibility
   if (!visible) return null;
 
@@ -31,12 +36,14 @@ export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
     componentProps.value = value;
     componentProps.onChange = onChange;
     // Prefer dynamic options from engine (e.g., via "option" action) over static config
-    const sourceOptions = (dynamicOptions as typeof field.options) ?? field.options;
-    componentProps.options = sourceOptions?.map((o) => ({
-      id: o.value,
-      label: o.label,
-      description: o.description,
-    })) || [];
+    const sourceOptions =
+      (dynamicOptions as typeof field.options) ?? field.options;
+    componentProps.options =
+      sourceOptions?.map((o) => ({
+        id: o.value,
+        label: o.label,
+        description: o.description,
+      })) || [];
     componentProps.multi = field.multiSelect;
   } else if (field.type === "radio") {
     componentProps.value = value;
@@ -52,14 +59,31 @@ export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
   }
 
   const typesWithInternalLabels = [
-    "text", "email", "password", "number", "tel", "url", "search", "decimal", "integer", "select"
+    "text",
+    "email",
+    "password",
+    "number",
+    "tel",
+    "url",
+    "search",
+    "decimal",
+    "integer",
+    "select",
   ];
-  const hasInternalLabel = typesWithInternalLabels.includes(field.type || "text");
-  const showExternalTopLabel = field.label && field.type !== "checkbox" && field.type !== "switch" && !hasInternalLabel;
+  const hasInternalLabel = typesWithInternalLabels.includes(
+    field.type || "text",
+  );
+  const showExternalTopLabel =
+    field.label &&
+    field.type !== "checkbox" &&
+    field.type !== "switch" &&
+    !hasInternalLabel;
 
   return (
     <Box display="flex" direction="column" gap="xs">
-      {(showExternalTopLabel || field.type === "checkbox" || field.type === "switch") && (
+      {(showExternalTopLabel ||
+        field.type === "checkbox" ||
+        field.type === "switch") && (
         <Box display="flex" align="center" gap="sm">
           {showExternalTopLabel && (
             <label
@@ -67,34 +91,34 @@ export default function FieldRenderer({ field }: { field: FormFieldConfig }) {
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {field.label}
-              {field.required && <span className="ml-1 text-destructive">*</span>}
+              {field.required && (
+                <span className="ml-1 text-destructive">*</span>
+              )}
             </label>
           )}
-          
-          {(field.type === "checkbox" || field.type === "switch") && (
-            <React.Suspense fallback={<div className="h-4 w-4 bg-muted rounded animate-pulse" />}>
+
+          {field.type === "checkbox" && (
+            <React.Suspense
+              fallback={
+                <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+              }
+            >
               <Component {...componentProps} />
             </React.Suspense>
-          )}
-          
-          {(field.type === "checkbox" || field.type === "switch") && field.label && (
-            <label
-              htmlFor={`form-field-${field.name}`}
-              className="text-sm font-medium leading-none cursor-pointer"
-            >
-              {field.label}
-              {field.required && <span className="ml-1 text-destructive">*</span>}
-            </label>
           )}
         </Box>
       )}
 
       {field.type !== "checkbox" && field.type !== "switch" && (
-        <React.Suspense fallback={<div className="h-10 w-full bg-muted rounded animate-pulse" />}>
+        <React.Suspense
+          fallback={
+            <div className="h-10 w-full bg-muted rounded animate-pulse" />
+          }
+        >
           <Component {...componentProps} />
         </React.Suspense>
       )}
-      
+
       {field.description && (
         <p className="text-[13px] text-muted-foreground">{field.description}</p>
       )}

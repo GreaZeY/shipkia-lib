@@ -31,7 +31,6 @@ const SelectTrigger = ({
       !size && !variant && "h-10", // Default height if no size or special variant
       isOpen && "border-primary",
       isOpen && multi && count > 5 && "rounded-3xl",
-      multi && hasSelection && "h-auto min-h-[40px] py-1.5",
       variant === "ghost" &&
         "h-full border-transparent ring-0 hover:border-transparent hover:bg-transparent focus:border-transparent focus:ring-0 active:bg-transparent active:shadow-none",
       (!variant || variant === "outline") && "active:bg-transparent",

@@ -68,16 +68,16 @@ export const autoDocsConfig: Record<string, PreviewConfig> = {
   Radio: {
     defaultProps: {
       options: [
-        { id: "1", label: "Option 1" },
-        { id: "2", label: "Option 2" },
+        { id: "1", label: "Shipkia" },
+        { id: "2", label: "Shiprocket" },
       ],
     },
   },
   CheckboxGroup: {
     defaultProps: {
       options: [
-        { id: "1", label: "Option 1" },
-        { id: "2", label: "Option 2" },
+        { id: "1", label: "Shipkia" },
+        { id: "2", label: "Shiprocket" },
       ],
     },
   },
@@ -334,7 +334,7 @@ export const autoDocsConfig: Record<string, PreviewConfig> = {
               {
                 name: "newsletter",
                 label: "Subscribe to Newsletter",
-                type: "switch",
+                type: "checkbox",
               },
             ],
           },

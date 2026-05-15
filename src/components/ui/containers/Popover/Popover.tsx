@@ -2,14 +2,21 @@ import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
-import { PREMIUM_EASE } from "@/lib/motion";
+import { PREMIUM_EASE, SPRING_DEFAULT } from "@/lib/motion";
 
 const PopoverContext = React.createContext<{ open: boolean }>({ open: false });
 
-export interface PopoverProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Root> {}
+export interface PopoverProps extends React.ComponentPropsWithoutRef<
+  typeof PopoverPrimitive.Root
+> {}
 
-const Popover = ({ open, onOpenChange, defaultOpen, children, ...props }: PopoverProps) => {
+const Popover = ({
+  open,
+  onOpenChange,
+  defaultOpen,
+  children,
+  ...props
+}: PopoverProps) => {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
   const isControlled = open !== undefined;
   const currentOpen = isControlled ? open : internalOpen;
@@ -21,7 +28,11 @@ const Popover = ({ open, onOpenChange, defaultOpen, children, ...props }: Popove
 
   return (
     <PopoverContext.Provider value={{ open: currentOpen }}>
-      <PopoverPrimitive.Root open={currentOpen} onOpenChange={handleOpenChange} {...props}>
+      <PopoverPrimitive.Root
+        open={currentOpen}
+        onOpenChange={handleOpenChange}
+        {...props}
+      >
         {children}
       </PopoverPrimitive.Root>
     </PopoverContext.Provider>
@@ -50,19 +61,16 @@ const PopoverContent = React.forwardRef<
             {...props}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 4 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{
                 opacity: 1,
-                scale: 1,
                 y: 0,
-                transition: { duration: 0.2, ease: PREMIUM_EASE },
               }}
               exit={{
                 opacity: 0,
-                scale: 0.98,
-                y: 2,
-                transition: { duration: 0.15, ease: PREMIUM_EASE },
+                y: 4,
               }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className={cn(
                 "z-50 w-72 rounded-2xl border border-border bg-card p-2 text-card-foreground shadow-xl outline-none",
                 className,

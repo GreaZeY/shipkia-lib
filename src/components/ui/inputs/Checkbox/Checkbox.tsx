@@ -72,9 +72,9 @@ const Checkbox = ({
   const generatedId = useId();
   const elementId = id || generatedId;
 
-  const [internalChecked, setInternalChecked] = useState<boolean | "indeterminate">(
-    defaultChecked ?? false
-  );
+  const [internalChecked, setInternalChecked] = useState<
+    boolean | "indeterminate"
+  >(defaultChecked ?? false);
   const isControlled = controlledChecked !== undefined;
   const checked = isControlled ? controlledChecked : internalChecked;
 
@@ -97,8 +97,12 @@ const Checkbox = ({
           className,
         )}
         {...props}
+        label=""
       >
-        <CheckboxPrimitive.Indicator forceMount className="flex items-center justify-center text-current">
+        <CheckboxPrimitive.Indicator
+          forceMount
+          className="flex items-center justify-center text-current"
+        >
           <AnimatePresence mode="wait">
             {checked === true && <CheckIcon key="check" />}
             {checked === "indeterminate" && <MinusIcon key="minus" />}

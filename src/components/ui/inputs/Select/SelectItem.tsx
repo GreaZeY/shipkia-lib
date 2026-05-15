@@ -28,7 +28,7 @@ const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
       className={cn(
         "flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-muted focus:outline-none disabled:opacity-50",
         isSelected && "text-primary",
-        isFocused && !isSelected && "bg-muted",
+        isFocused && "bg-muted",
         className,
       )}
     >

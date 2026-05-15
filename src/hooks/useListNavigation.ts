@@ -24,8 +24,6 @@ export const useListNavigation = ({
     setPrevIsOpen(isOpen);
     if (!isOpen) {
       setActiveIndex(initialIndex);
-    } else if (isOpen && activeIndex === -1 && itemCount > 0) {
-      setActiveIndex(0);
     }
   }
 
