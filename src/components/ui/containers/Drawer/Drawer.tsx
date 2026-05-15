@@ -4,18 +4,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@components/ui/inputs/Button/Button";
+import { motion, AnimatePresence } from "motion/react";
+import { SPRING_DEFAULT, PREMIUM_EASE } from "@/lib/motion";
 
 const drawerVariants = cva(
-  "z-50 flex flex-col gap-4 p-6 transition-all duration-300 ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out",
+  "z-50 flex flex-col gap-4 p-6",
   {
     variants: {
       position: {
-        top: "inset-x-0 top-0 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top drawer-top",
-        bottom:
-          "inset-x-0 bottom-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom drawer-bottom",
-        left: "inset-y-0 left-0 h-full data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm drawer-left",
-        right:
-          "inset-y-0 right-0 h-full border-l border-white/10 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm drawer-right",
+        top: "inset-x-0 top-0",
+        bottom: "inset-x-0 bottom-0",
+        left: "inset-y-0 left-0 h-full sm:max-w-sm",
+        right: "inset-y-0 right-0 h-full border-l border-white/10 sm:max-w-sm",
       },
       variant: {
         temporary: "fixed w-3/4 shadow-2xl water-lens",
@@ -41,6 +41,20 @@ export interface DrawerProps
   className?: string;
 }
 
+const getSlideVariants = (position: "top" | "bottom" | "left" | "right") => {
+  switch (position) {
+    case "top":
+      return { initial: { y: "-100%" }, animate: { y: 0 }, exit: { y: "-100%" } };
+    case "bottom":
+      return { initial: { y: "100%" }, animate: { y: 0 }, exit: { y: "100%" } };
+    case "left":
+      return { initial: { x: "-100%" }, animate: { x: 0 }, exit: { x: "-100%" } };
+    case "right":
+    default:
+      return { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
+  }
+};
+
 const Drawer = ({
   open,
   onOpenChange,
@@ -55,6 +69,15 @@ const Drawer = ({
   className,
 }: DrawerProps) => {
   const isPersistent = variant === "persistent";
+  
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
+  const isControlled = open !== undefined;
+  const currentOpen = isControlled ? open : internalOpen;
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!isControlled) setInternalOpen(newOpen);
+    onOpenChange?.(newOpen);
+  };
 
   const renderTitle = () => {
     if (!title) return null;
@@ -103,40 +126,60 @@ const Drawer = ({
       <div
         className={cn(
           drawerVariants({ position, variant }),
-          !open && "hidden",
+          !currentOpen && "hidden",
           className,
         )}
-        data-state={open ? "open" : "closed"}
       >
         {content}
       </div>
     );
   }
 
+  const slideVariants = getSlideVariants(position as any);
+
   return (
     <DialogPrimitive.Root
-      open={open}
-      onOpenChange={onOpenChange}
-      defaultOpen={defaultOpen}
+      open={currentOpen}
+      onOpenChange={handleOpenChange}
     >
       {trigger && (
         <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       )}
 
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/5 backdrop-blur-[2px]" />
+      <AnimatePresence>
+        {currentOpen && (
+          <DialogPrimitive.Portal forceMount>
+            <DialogPrimitive.Overlay asChild>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.15, ease: PREMIUM_EASE } }}
+                exit={{ opacity: 0, transition: { duration: 0.1, ease: PREMIUM_EASE } }}
+                className="fixed inset-0 z-50 bg-black/5 backdrop-blur-[2px]"
+              />
+            </DialogPrimitive.Overlay>
 
-        <DialogPrimitive.Content
-          onInteractOutside={(e) => {
-            if (isPersistent) {
-              e.preventDefault();
-            }
-          }}
-          className={cn(drawerVariants({ position, variant }), className)}
-        >
-          {content}
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
+            <DialogPrimitive.Content
+              onInteractOutside={(e) => {
+                if (isPersistent) {
+                  e.preventDefault();
+                }
+              }}
+              asChild
+            >
+              <motion.div
+                variants={slideVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={SPRING_DEFAULT}
+                className={cn(drawerVariants({ position, variant }), className)}
+              >
+                {content}
+              </motion.div>
+            </DialogPrimitive.Content>
+          </DialogPrimitive.Portal>
+        )}
+      </AnimatePresence>
     </DialogPrimitive.Root>
   );
 };

@@ -1,8 +1,10 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Circle } from "lucide-react";
-import { cn } from "@lib/utils";
+import { cn } from "@/lib/utils";
 import Box from "@components/ui/containers/Box/Box";
+import { motion } from "motion/react";
+import { SPRING_DEFAULT } from "@/lib/motion";
 
 export interface RadioOption {
   id: string;
@@ -85,8 +87,15 @@ const RadioGroupItem = React.forwardRef<
         )}
         {...props}
       >
-        <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-          <Circle className="h-2 w-2 fill-current text-primary" />
+        <RadioGroupPrimitive.Indicator asChild>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={SPRING_DEFAULT}
+            className="flex items-center justify-center"
+          >
+            <Circle className="h-2 w-2 fill-current text-primary" />
+          </motion.div>
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
       {(label || description) && (

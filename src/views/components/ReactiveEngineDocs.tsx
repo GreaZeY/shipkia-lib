@@ -1004,13 +1004,4 @@ const InlineCode = ({ children }: { children: React.ReactNode }) => (
   </code>
 );
 
-const SectionHeader = ({ children }: { children: React.ReactNode }) => (
-  <Label
-    variant="subtitle"
-    className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
-  >
-    {children}
-  </Label>
-);
-
 export default ReactiveEngineDocs;

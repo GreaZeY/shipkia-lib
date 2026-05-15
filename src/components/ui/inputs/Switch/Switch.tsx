@@ -1,8 +1,10 @@
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@lib/utils";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { SPRING_DEFAULT, SPRING_SOFT } from "@/lib/motion";
 
 const switchVariants = cva(
   "peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-muted",
@@ -21,13 +23,13 @@ const switchVariants = cva(
 );
 
 const thumbVariants = cva(
-  "pointer-events-none block flex items-center justify-center rounded-full bg-white shadow-lg ring-0 transition-transform",
+  "pointer-events-none block flex items-center justify-center rounded-full bg-white shadow-lg ring-0",
   {
     variants: {
       size: {
-        sm: "h-3 w-3 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0",
-        md: "h-4 w-4 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0",
-        lg: "h-5 w-5 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
+        sm: "h-3 w-3",
+        md: "h-4 w-4",
+        lg: "h-5 w-5",
       },
     },
     defaultVariants: {
@@ -35,6 +37,12 @@ const thumbVariants = cva(
     },
   },
 );
+
+const thumbXTranslation = {
+  sm: 16, // translate-x-4
+  md: 16, // translate-x-4
+  lg: 20, // translate-x-5
+};
 
 export interface SwitchProps
   extends
@@ -60,41 +68,61 @@ const Switch = ({
   activeThumbIcon,
   inactiveThumbIcon,
   ref,
+  checked: controlledChecked,
+  defaultChecked,
+  onCheckedChange,
   ...props
 }: SwitchProps) => {
-  const [checked, setChecked] = useState(
-    props.defaultChecked || props.checked || false,
-  );
+  const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
+  const isControlled = controlledChecked !== undefined;
+  const checked = isControlled ? controlledChecked : internalChecked;
 
   const handleCheckedChange = (value: boolean) => {
-    setChecked(value);
-    props.onCheckedChange?.(value);
+    if (!isControlled) setInternalChecked(value);
+    onCheckedChange?.(value);
   };
-
-  // // Handle controlled state
-  // useEffect(() => {
-  //   if (props.checked !== undefined) {
-  //     setChecked(props.checked);
-  //   }
-  // }, [props.checked]);
 
   return (
     <SwitchPrimitives.Root
       className={cn(switchVariants({ size, className }))}
-      {...props}
+      checked={checked}
       onCheckedChange={handleCheckedChange}
       ref={ref}
+      {...props}
     >
-      <SwitchPrimitives.Thumb className={cn(thumbVariants({ size }))}>
-        {checked ? (
-          <div className="animate-in zoom-in-50 scale-75 text-black duration-200">
-            {activeThumbIcon}
-          </div>
-        ) : (
-          <div className="animate-in zoom-in-50 scale-75 text-muted-foreground duration-200">
-            {inactiveThumbIcon}
-          </div>
-        )}
+      <SwitchPrimitives.Thumb asChild>
+        <motion.span
+          className={cn(thumbVariants({ size }))}
+          animate={{ x: checked ? thumbXTranslation[size || "md"] : 0 }}
+          transition={SPRING_DEFAULT}
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            {checked && activeThumbIcon ? (
+              <motion.div
+                key="active"
+                initial={{ scale: 0.2, opacity: 0 }}
+                animate={{ scale: 0.75, opacity: 1 }}
+                exit={{ scale: 0.2, opacity: 0 }}
+                transition={SPRING_SOFT}
+                className="text-black flex items-center justify-center absolute"
+              >
+                {activeThumbIcon}
+              </motion.div>
+            ) : null}
+            {!checked && inactiveThumbIcon ? (
+              <motion.div
+                key="inactive"
+                initial={{ scale: 0.2, opacity: 0 }}
+                animate={{ scale: 0.75, opacity: 1 }}
+                exit={{ scale: 0.2, opacity: 0 }}
+                transition={SPRING_SOFT}
+                className="text-muted-foreground flex items-center justify-center absolute"
+              >
+                {inactiveThumbIcon}
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </motion.span>
       </SwitchPrimitives.Thumb>
     </SwitchPrimitives.Root>
   );

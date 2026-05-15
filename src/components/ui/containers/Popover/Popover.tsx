@@ -1,8 +1,32 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "motion/react";
+import { PREMIUM_EASE } from "@/lib/motion";
 
-const Popover = PopoverPrimitive.Root;
+const PopoverContext = React.createContext<{ open: boolean }>({ open: false });
+
+export interface PopoverProps
+  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Root> {}
+
+const Popover = ({ open, onOpenChange, defaultOpen, children, ...props }: PopoverProps) => {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
+  const isControlled = open !== undefined;
+  const currentOpen = isControlled ? open : internalOpen;
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!isControlled) setInternalOpen(newOpen);
+    onOpenChange?.(newOpen);
+  };
+
+  return (
+    <PopoverContext.Provider value={{ open: currentOpen }}>
+      <PopoverPrimitive.Root open={currentOpen} onOpenChange={handleOpenChange} {...props}>
+        {children}
+      </PopoverPrimitive.Root>
+    </PopoverContext.Provider>
+  );
+};
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
@@ -11,20 +35,47 @@ const PopoverAnchor = PopoverPrimitive.Anchor;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal>
-    <PopoverPrimitive.Content
-      ref={ref}
-      align={align}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 w-72 rounded-2xl border border-border bg-card p-2 text-card-foreground shadow-xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className,
+>(({ className, align = "center", sideOffset = 4, ...props }, ref) => {
+  const { open } = React.useContext(PopoverContext);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <PopoverPrimitive.Portal forceMount>
+          <PopoverPrimitive.Content
+            ref={ref}
+            align={align}
+            sideOffset={sideOffset}
+            asChild
+            {...props}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 4 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                transition: { duration: 0.2, ease: PREMIUM_EASE },
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.98,
+                y: 2,
+                transition: { duration: 0.15, ease: PREMIUM_EASE },
+              }}
+              className={cn(
+                "z-50 w-72 rounded-2xl border border-border bg-card p-2 text-card-foreground shadow-xl outline-none",
+                className,
+              )}
+            >
+              {props.children}
+            </motion.div>
+          </PopoverPrimitive.Content>
+        </PopoverPrimitive.Portal>
       )}
-      {...props}
-    />
-  </PopoverPrimitive.Portal>
-));
+    </AnimatePresence>
+  );
+});
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 export default Popover;

@@ -1,8 +1,10 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+import { hoverVariant, tapVariant } from "@/lib/motion";
 
 const cardVariants = cva(
-  "relative overflow-hidden transition-all duration-300",
+  "relative overflow-hidden",
   {
     variants: {
       variant: {
@@ -27,7 +29,7 @@ const cardVariants = cva(
         "2xl": "rounded-2xl",
       },
       interactive: {
-        true: "hover:shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer",
+        true: "cursor-pointer hover:shadow-md transition-shadow duration-200",
         false: "",
       },
     },
@@ -54,12 +56,14 @@ const Card = ({
   ...props
 }: CardProps) => {
   return (
-    <div
+    <motion.div
       className={cn(
         cardVariants({ variant, padding, radius, interactive, className }),
       )}
+      whileHover={interactive ? hoverVariant : undefined}
+      whileTap={interactive ? tapVariant : undefined}
       role="card"
-      {...props}
+      {...(props as any)}
     />
   );
 };

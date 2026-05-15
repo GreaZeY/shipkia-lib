@@ -4,6 +4,8 @@ import { LoaderCircle } from "lucide-react";
 import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@components/ui/inputs/Button/Button.styles";
+import { motion } from "motion/react";
+import { tapVariant } from "@/lib/motion";
 
 export interface ButtonProps
   extends
@@ -48,6 +50,9 @@ export interface ButtonProps
   ref?: React.Ref<HTMLButtonElement>;
 }
 
+// Ensure Slot is compatible with motion
+const MotionSlot = motion.create(Slot);
+
 const Button = ({
   className,
   variant,
@@ -64,7 +69,7 @@ const Button = ({
   ref,
   ...props
 }: ButtonProps) => {
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? MotionSlot : motion.button;
   const leadingIcon = loading ? (
     <LoaderCircle size={16} className="animate-spin" />
   ) : (
@@ -76,7 +81,8 @@ const Button = ({
       className={cn(buttonVariants({ variant, size, isActive, className }))}
       ref={ref}
       disabled={disabled || loading}
-      {...props}
+      whileTap={!(disabled || loading) ? tapVariant : undefined}
+      {...(props as any)}
     >
       {leadingIcon && iconPosition === "left" && (
         <span className={cn("inline-flex shrink-0", children ? "mr-2.5" : "")}>

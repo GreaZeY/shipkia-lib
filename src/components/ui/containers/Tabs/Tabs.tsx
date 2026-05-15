@@ -6,6 +6,8 @@ import { Activity } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Card from "@components/ui/containers/Card/Card";
 import Button from "@components/ui/inputs/Button/Button";
+import { motion, AnimatePresence } from "motion/react";
+import { SPRING_DEFAULT, defaultEntranceVariant } from "@/lib/motion";
 
 const tabsVariants = cva("w-full", {
   variants: {
@@ -114,7 +116,7 @@ const Tabs = ({
     const val = value !== undefined ? value : activeTab;
     const timer = setTimeout(() => {
       setDelayedValue(val);
-    }, 400); // Sync with transition duration
+    }, 220); // Sync with motion transition duration
     return () => clearTimeout(timer);
   }, [value, activeTab]);
 
@@ -179,19 +181,13 @@ const TabsList = ({
   ref,
   ...props
 }: TabsListProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { variant, value } = React.useContext(TabsContext);
-  const [indicatorStyle, setIndicatorStyle] =
-    React.useState<React.CSSProperties>({});
+  const { variant } = React.useContext(TabsContext);
   const [scrollInfo, setScrollInfo] = React.useState({
     canScrollLeft: false,
     canScrollRight: false,
   });
 
-  const innerRef = React.useRef<HTMLDivElement>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  // Expose ref
-  React.useImperativeHandle(ref, () => innerRef.current!);
 
   const checkScroll = React.useCallback(() => {
     if (scrollRef.current) {
@@ -215,28 +211,6 @@ const TabsList = ({
       return () => observer.disconnect();
     }
   }, [checkScroll]);
-
-  React.useLayoutEffect(() => {
-    if (!innerRef.current) return;
-
-    const activeTrigger = innerRef.current.querySelector(
-      '[data-state="active"]',
-    ) as HTMLElement;
-
-    if (activeTrigger) {
-      const listRect = innerRef.current.getBoundingClientRect();
-      const triggerRect = activeTrigger.getBoundingClientRect();
-
-      setIndicatorStyle({
-        transform: `translateX(${triggerRect.left - listRect.left}px) translateY(${triggerRect.top - listRect.top}px)`,
-        width: triggerRect.width,
-        height: triggerRect.height,
-        opacity: 1,
-      });
-    } else {
-      setIndicatorStyle({ opacity: 0 });
-    }
-  }, [value]);
 
   const scrollBy = (offset: number) => {
     scrollRef.current?.scrollBy({ left: offset, behavior: "smooth" });
@@ -305,24 +279,9 @@ const TabsList = ({
         )}
       >
         <TabsPrimitive.List
-          ref={innerRef}
           className="relative flex h-full w-full items-center justify-start gap-1"
           {...props}
         >
-          <div
-            className={cn(
-              "absolute top-0 left-0 z-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-              variant === "pill" && "rounded-lg bg-primary",
-              variant === "enclosed" && "rounded-full bg-primary",
-              variant === "ghost" && "rounded-lg bg-muted",
-              variant === "underline" &&
-                "rounded-none border-b-2 border-primary bg-transparent",
-            )}
-            style={{
-              ...indicatorStyle,
-              height: variant === "underline" ? "100%" : indicatorStyle.height,
-            }}
-          />
           {props.children}
         </TabsPrimitive.List>
       </div>
@@ -374,8 +333,24 @@ const TabsTrigger = ({
       )}
       {...props}
     >
-      {icon && <span className="shrink-0">{icon}</span>}
-      {children}
+      {actualValue === value && (
+        <motion.div
+          layoutId="tab-indicator"
+          className={cn(
+            "absolute inset-0 z-0 pointer-events-none",
+            variant === "pill" && "rounded-lg bg-primary",
+            variant === "enclosed" && "rounded-full bg-primary",
+            variant === "ghost" && "rounded-lg bg-muted",
+            variant === "underline" &&
+              "rounded-none border-b-2 border-primary bg-transparent h-full",
+          )}
+          transition={SPRING_DEFAULT}
+        />
+      )}
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        {icon && <span className="shrink-0">{icon}</span>}
+        {children}
+      </span>
     </TabsPrimitive.Trigger>
   );
 };
@@ -400,17 +375,23 @@ const TabsContent = ({
   const isActive = activeValue === value;
 
   const content = (
-    <Card
-      className={cn(
-        "mt-4 outline-none transition-all duration-300 ease-out-expo data-[state=inactive]:opacity-0 data-[state=active]:opacity-100 data-[state=active]:animate-tab-in",
-        contentMaxHeight && "custom-scrollbar overflow-y-auto",
-        className,
-      )}
-      style={contentMaxHeight ? { maxHeight: contentMaxHeight } : undefined}
-      data-state={isActive ? "active" : "inactive"}
+    <motion.div
+      variants={defaultEntranceVariant}
+      initial="initial"
+      animate="animate"
+      exit="exit"
     >
-      {children}
-    </Card>
+      <Card
+        className={cn(
+          "mt-4 outline-none",
+          contentMaxHeight && "custom-scrollbar overflow-y-auto",
+          className,
+        )}
+        style={contentMaxHeight ? { maxHeight: contentMaxHeight } : undefined}
+      >
+        {children}
+      </Card>
+    </motion.div>
   );
 
   if (keepMounted) {
