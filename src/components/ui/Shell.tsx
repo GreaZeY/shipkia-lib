@@ -1,14 +1,14 @@
 import { eventBus } from "@/framework/runtime/event-bus";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 
 interface ShellProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Shell Runtime Provider
  *
- * Section 5 of LLD: "Shell Runtime -> Dependency Injection Runtime -> ... -> Projection Components"
+ * Shell Runtime -> Dependency Injection Runtime -> ... -> Projection Components"
  * This is the root of the "Frontend OS".
  */
 export default function Shell({ children }: ShellProps) {
