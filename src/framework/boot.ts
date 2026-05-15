@@ -78,7 +78,7 @@ export class Application {
   //         };
   //       } catch (err) {
   //         console.error(
-  //           `[buopso] Failed to load app module for "${entry.name}":`,
+  //           `[shipkia] Failed to load app module for "${entry.name}":`,
   //           err,
   //         );
   //         return null;
@@ -147,7 +147,7 @@ export class Application {
   //     }
   //
   //     console.log(
-  //       `[buopso] App "${config.appName}" loaded (priority: ${priority}).`,
+  //       `[shipkia] App "${config.appName}" loaded (priority: ${priority}).`,
   //     );
   //   }
   //

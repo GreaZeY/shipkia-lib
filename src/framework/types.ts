@@ -30,7 +30,7 @@ export interface ThemeOverrides {
  *
  * @example
  * // user_apps/shipkia/ui/app_config.ts
- * import type { AppConfig } from '@buopso/framework';
+ * import type { AppConfig } from '@shipkia/framework';
  *
  * const config: AppConfig = {
  *   appName: 'Shipkia',
@@ -58,7 +58,10 @@ export interface AppConfig {
   sidebar?: SidebarItem[];
   routes?: RouteConfig[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  overrides?: Record<string, ComponentType<Record<string, unknown>> | LazyExoticComponent<any>>;
+  overrides?: Record<
+    string,
+    ComponentType<Record<string, unknown>> | LazyExoticComponent<any>
+  >;
   permissions?: PermissionRule[];
   rules?: MetadataReactiveRule[];
   commands?: Record<string, CommandHandler>;

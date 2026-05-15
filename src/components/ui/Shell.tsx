@@ -1,5 +1,5 @@
-import * as React from "react";
 import { eventBus } from "@/framework/runtime/event-bus";
+import { useEffect } from "react";
 
 interface ShellProps {
   children: React.ReactNode;
@@ -7,26 +7,29 @@ interface ShellProps {
 
 /**
  * Shell Runtime Provider
- * 
+ *
  * Section 5 of LLD: "Shell Runtime -> Dependency Injection Runtime -> ... -> Projection Components"
  * This is the root of the "Frontend OS".
  */
 export default function Shell({ children }: ShellProps) {
   // Ensure core services are available globally
   // In a real boot flow, this would happen in bootFramework()
-  React.useEffect(() => {
-    console.log("[buopso] Shell Runtime initialized.");
-    
+  useEffect(() => {
+    console.log("[shipkia] Shell Runtime initialized.");
+
     // Wire up global event listeners for runtime orchestration
     const unsub = eventBus.on("mutation.success", (payload) => {
-      console.log("[buopso] Global sync triggered by mutation:", payload);
+      console.log("[shipkia] Global sync triggered by mutation:", payload);
     });
 
     return () => unsub();
   }, []);
 
   return (
-    <div id="buopso-shell" className="h-full w-full bg-background text-foreground">
+    <div
+      id="shipkia-shell"
+      className="h-full w-full bg-background text-foreground"
+    >
       {children}
     </div>
   );

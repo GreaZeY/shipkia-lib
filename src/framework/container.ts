@@ -1,6 +1,6 @@
 /**
  * Dependency Injection Runtime
- * 
+ *
  * Section 7 of LLD: "All runtime systems resolve dependencies through container runtime."
  * Never import runtime singletons directly.
  */
@@ -40,7 +40,7 @@ class Container {
       return service as T;
     }
 
-    throw new Error(`[buopso] Service not found in container: ${id}`);
+    throw new Error(`[shipkia] Service not found in container: ${id}`);
   }
 
   /**

@@ -11,7 +11,7 @@ export interface MetadataReactiveRule {
 
 /**
  * Metadata Compiler
- * 
+ *
  * Section 10 of LLD: "Normalize metadata -> Build dependency graphs -> Compile expressions"
  * Section 9 of LLD: "Metadata must remain serializable... NEVER ALLOW functions."
  */
@@ -33,7 +33,8 @@ export class MetadataCompiler {
 
       if (rule.when) {
         const expression = rule.when;
-        compiled.when = (data) => Boolean(this.evaluateExpression(expression, data));
+        compiled.when = (data) =>
+          Boolean(this.evaluateExpression(expression, data));
       }
 
       if (rule.then) {
@@ -60,15 +61,16 @@ export class MetadataCompiler {
    * In a production LLD, this would use a more robust parser (like jexl or a custom AST).
    * For now, we'll support basic arithmetic and comparisons.
    */
-  private evaluateExpression(expression: string, data: Record<string, unknown>): unknown {
+  private evaluateExpression(
+    expression: string,
+    data: Record<string, unknown>,
+  ): unknown {
     if (typeof expression !== "string") return expression;
 
     const trimmed = expression.trim();
 
     try {
-      const comparison = trimmed.match(
-        /^(.+?)\s*(===|!==|>=|<=|>|<)\s*(.+)$/,
-      );
+      const comparison = trimmed.match(/^(.+?)\s*(===|!==|>=|<=|>|<)\s*(.+)$/);
 
       if (comparison) {
         const [, leftRaw, operator, rightRaw] = comparison;
@@ -97,12 +99,18 @@ export class MetadataCompiler {
 
       return this.resolveOperand(trimmed, data);
     } catch (err) {
-      console.warn(`[buopso] Expression evaluation failed: ${expression}`, err);
+      console.warn(
+        `[shipkia] Expression evaluation failed: ${expression}`,
+        err,
+      );
       return undefined;
     }
   }
 
-  private resolveOperand(rawOperand: string, data: Record<string, unknown>): unknown {
+  private resolveOperand(
+    rawOperand: string,
+    data: Record<string, unknown>,
+  ): unknown {
     const operand = rawOperand.trim();
 
     if (

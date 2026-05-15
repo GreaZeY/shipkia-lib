@@ -19,7 +19,7 @@ export interface PreviewConfig {
 const selectOptions = [
   {
     id: "opt-1",
-    label: "Buopso",
+    label: "Shipkia",
     icon: <div className="h-2 w-2 rounded-full bg-primary" />,
     description: "Advanced logistics and fulfillment engine",
   },

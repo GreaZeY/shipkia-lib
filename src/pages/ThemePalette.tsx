@@ -266,7 +266,7 @@ const ThemePalette = () => {
                   Brand Identity
                 </h4>
                 <p className="relative z-10 mt-1 text-xs text-primary-foreground/70">
-                  Lime Green (#bef264) as the core accent for the Buopso
+                  Lime Green (#bef264) as the core accent for the Shipkia
                   Framework.
                 </p>
               </section>

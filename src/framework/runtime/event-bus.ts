@@ -1,6 +1,6 @@
 /**
  * Event Bus Runtime
- * 
+ *
  * Section 21 of LLD: "Runtime systems communicate through events."
  * Events NEVER target UI directly.
  */
@@ -32,8 +32,8 @@ class EventBus {
    * Section 21: "Event emitted -> Scheduler queue -> Runtime listeners"
    */
   public emit<T>(event: string, payload: T): void {
-    console.log(`[buopso] Event emitted: ${event}`, payload);
-    
+    console.log(`[shipkia] Event emitted: ${event}`, payload);
+
     const eventSet = this.listeners.get(event);
     if (!eventSet) return;
 
@@ -41,7 +41,7 @@ class EventBus {
       try {
         callback(payload);
       } catch (err) {
-        console.error(`[buopso] Error in event listener for ${event}:`, err);
+        console.error(`[shipkia] Error in event listener for ${event}:`, err);
       }
     });
   }

@@ -1,6 +1,6 @@
 /**
  * Framework Registry Runtime
- * 
+ *
  * Section 11 of LLD: "Everything extensible registers through registries."
  * Section 12 of LLD: "Extensions modify runtime behavior safely via priority."
  */
@@ -25,11 +25,11 @@ class Registry {
     }
 
     const keyEntries = this.entries.get(key)!;
-    
+
     // Replace if ID already exists in this key, otherwise add
     const entry: RegistryEntry<T> = { id: key, value, priority };
     keyEntries.push(entry);
-    
+
     // Sort by priority (descending)
     keyEntries.sort((a, b) => b.priority - a.priority);
   }
@@ -41,7 +41,7 @@ class Registry {
     const keyEntries = this.entries.get(key);
     if (!keyEntries || keyEntries.length === 0) {
       if (fallback === undefined) {
-        throw new Error(`[buopso] Registry key not found: ${key}`);
+        throw new Error(`[shipkia] Registry key not found: ${key}`);
       }
       return fallback;
     }
@@ -56,7 +56,7 @@ class Registry {
   public resolveAll<T>(key: string): T[] {
     const keyEntries = this.entries.get(key);
     if (!keyEntries) return [];
-    return keyEntries.map(e => e.value as T);
+    return keyEntries.map((e) => e.value as T);
   }
 
   public has(key: string): boolean {
@@ -72,7 +72,11 @@ class Registry {
 export const registry = new Registry();
 
 // Legacy compatibility wrappers to prevent breaking existing code
-export function register<T>(key: string, component: T, priority: number = 100): void {
+export function register<T>(
+  key: string,
+  component: T,
+  priority: number = 100,
+): void {
   registry.register(key, component, priority);
 }
 

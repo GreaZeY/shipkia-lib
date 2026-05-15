@@ -2,7 +2,7 @@ import { scheduler } from "@/framework/runtime/scheduler";
 
 /**
  * Transaction Runtime
- * 
+ *
  * Section 23 of LLD: "All runtime updates are transactional."
  * BEGIN -> Snapshot -> Patch -> COMMIT
  */
@@ -11,12 +11,17 @@ export interface TransactionPatch {
   [key: string]: unknown;
 }
 
-export class Transaction<TState extends Record<string, unknown> = Record<string, unknown>> {
+export class Transaction<
+  TState extends Record<string, unknown> = Record<string, unknown>,
+> {
   private snapshot: TState;
   private patches: TransactionPatch[] = [];
   private onCommit: (finalData: TState, patches: TransactionPatch) => void;
 
-  constructor(initialState: TState, onCommit: (finalData: TState, patches: TransactionPatch) => void) {
+  constructor(
+    initialState: TState,
+    onCommit: (finalData: TState, patches: TransactionPatch) => void,
+  ) {
     this.snapshot = structuredClone(initialState);
     this.onCommit = onCommit;
   }
@@ -44,13 +49,15 @@ export class Transaction<TState extends Record<string, unknown> = Record<string,
         });
       });
 
-      console.log(`[buopso] Committing transaction with ${this.patches.length} patches.`);
+      console.log(
+        `[shipkia] Committing transaction with ${this.patches.length} patches.`,
+      );
       this.onCommit(finalData, mergedPatch);
     });
   }
 
   public rollback(): void {
-    console.warn("[buopso] Transaction rolled back to snapshot.");
+    console.warn("[shipkia] Transaction rolled back to snapshot.");
     this.onCommit(this.snapshot, {});
   }
 }
